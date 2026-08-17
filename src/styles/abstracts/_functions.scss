@@ -1,0 +1,10 @@
+@use 'sass:map';
+@use 'tokens' as *;
+
+// color('primary') 로 색상 맵 참조
+@function color($key) {
+  @if map.has-key($colors, $key) {
+    @return map.get($colors, $key);
+  }
+  @error "Unknown color key: #{$key}";
+}

@@ -1,0 +1,65 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/mixins' as *;
+
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 60px;
+
+  &__grid {
+    @include fill;
+    z-index: 1;
+    background: url('/images/main-backgroud.png') no-repeat;
+    background-size: cover;
+  }
+
+  &__wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    width: 1564px;
+    max-width: calc(100% - 48px);
+    height: 351px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__title {
+    @include type-hero;
+    margin-top: 75px;
+    color: $color-primary;
+  }
+
+  &__desc {
+    width: 340px;
+
+    h2 {
+      @include type-heading;
+      color: $color-primary;
+    }
+  }
+
+  // TV 중앙 앵커
+  &__tv {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+  }
+}
+
+@keyframes hero-bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 8px);
+  }
+}

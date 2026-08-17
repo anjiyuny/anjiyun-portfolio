@@ -1,0 +1,36 @@
+@use '../abstracts/tokens' as *;
+
+// 스마일 + 그 뒤 작은 원형 배경. TV 위에서 함께 두둥실(JS translate).
+.smile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  z-index: 60;
+  will-change: transform;
+
+  // 스마일 뒤 '동그란 작은 배경' (확장의 시작점 느낌)
+  &__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    filter: blur(2px);
+    background: radial-gradient(circle, #ff8fe6 0%, #c76bff 55%, transparent 72%);
+  }
+
+  // 스마일 아이콘 — 중앙정렬/이동 transform 은 GSAP 담당 (여기선 left/top 만)
+  &__icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: auto;                    // ✅ 수정: 추가
+    max-width: none;                 // ✅ 수정: 추가 — 0폭 부모 안에서도 안 찌그러지게 (img 로 교체해도 안전)
+    filter: drop-shadow(0 4px 10px rgba($color-primary, .4));
+  }
+}

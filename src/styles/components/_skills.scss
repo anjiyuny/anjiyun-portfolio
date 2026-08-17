@@ -1,0 +1,25 @@
+@use '../abstracts/tokens' as *;
+
+.skills {
+  position: relative;
+  height: 100vh;
+  background: $color-primary;
+  overflow: hidden;
+
+  &__stage { position: absolute; inset: 0; }
+
+  // 좌상단 Skills 라벨
+  &__label {
+    position: absolute;
+    top: 74px;
+    left: 22px;
+    z-index: 60;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: $color-white;
+    color: $color-primary;
+    font: italic 800 26px/1 Georgia, 'Times New Roman', serif;
+    transform: rotate(-4deg);
+    box-shadow: 0 8px 18px rgba(#0a0a3c, .3);
+  }
+}

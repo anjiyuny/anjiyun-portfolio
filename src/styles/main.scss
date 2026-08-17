@@ -1,0 +1,27 @@
+// ============================================================
+//  main.scss — 진입점 (import 순서 = 낮은 특이성 → 컴포넌트)
+// ============================================================
+
+// 1) Abstracts (변수/함수/믹스인) — CSS 출력 없음
+@use 'abstracts/tokens';
+@use 'abstracts/functions';
+@use 'abstracts/mixins';
+
+// 2) Base
+@use 'base/fonts';
+@use 'base/reset';
+@use 'base/base';
+
+// 3) Layout
+@use 'layout/nav';
+
+// 4) Components
+@use 'components/window';
+@use 'components/hero';
+@use 'components/tv';
+@use 'components/reveal';
+@use 'components/smile';
+@use 'components/projects';
+@use 'components/card';
+@use 'components/skills';
+@use 'components/folder';

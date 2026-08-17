@@ -1,0 +1,21 @@
+@use '../abstracts/tokens' as *;
+
+// 스마일 뒤에서 원 → 둥근 사각형 → 풀스크린으로 확장되는 배경.
+// 위치/크기/모서리는 JS(GSAP)가 제어.
+.reveal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-radius: 28px;
+  overflow: hidden;
+  z-index: 55;
+  will-change: width, height;
+
+  // 실제 배경 이미지 (public/images) — 커지는 박스에 꽉 채움
+  background-image: url('/images/projectbackground.jpg');
+  background-size: 100% 100%;
+  background-position: center;
+}

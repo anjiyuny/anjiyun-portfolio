@@ -1,0 +1,54 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/mixins' as *;
+
+.window {
+  position: relative;
+  border: 1px solid $color-primary;
+  border-radius: 10px;
+  background: $color-white;
+  width: 444px;
+  margin-left: 25px;
+
+  &__bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 37px;
+    padding: 0 20px;
+    background: $color-primary;
+    border-radius: 10px 10px 0px 0px;
+
+    img {
+      width: 83px;
+      height: 21px;
+    }
+  }
+
+  &__btn {
+    width: 14px;
+    height: 14px;
+    background: $color-white;
+    color: $color-primary;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+  }
+
+  &__body {
+    padding: 27px 26px;
+    font-family: $font-gmarket;
+    font-weight: $fw-light;
+    font-size: $fs-body;
+    line-height: 28px;
+    color: $color-text;
+  }
+  .cursor {
+    position: absolute;
+    background: url(/images/icon/ico-cursor.svg) no-repeat;
+    background-position: center;
+    bottom: -31px;
+    right: -21px;
+    width: 46px;
+    height: 46px;
+  }
+}

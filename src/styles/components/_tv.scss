@@ -1,0 +1,78 @@
+@use '../abstracts/tokens' as *;
+
+.tv {
+  will-change: transform;
+
+  &__body {
+    position: relative;
+    // tv-frame.png 가 1200x1200 정사각형 → 600x600 으로 표시 (@2x)
+    // 화면이 좁아지면 90vw 까지 축소
+    width: min(600px, 90vw);
+    aspect-ratio: 1;
+    transform: rotate(-7deg);
+    will-change: transform;
+
+    // 뒤에 따라다니는 분홍 글로우
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      left: 30%;
+      top: 43%;
+      width: 630px;
+      height: 630px;
+      transform: translate(-50%, -50%);
+      background: rgba(254, 157, 234, 0.5);
+      filter: blur(25px);
+      border-radius: 50%;
+    }
+  }
+
+  &__frame {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: url('/images/tv-frame.png') no-repeat;
+    background-size: contain;
+    background-position: center;
+  }
+
+  &__screen {
+    position: absolute;
+    left: 50%;
+    top: 49%;
+    width: 60%;
+    height: 41%;
+    transform: translate(-50%, -50%);
+    border-radius: 5%;
+    overflow: hidden;
+    z-index: 3;
+    background:
+      radial-gradient(circle at 30% 30%, #7fd0ff, transparent 60%),
+      linear-gradient(135deg, #4f7bff, #b45cff 55%, #ff6ec7);
+    box-shadow: inset 0 0 40px rgba(#000, 0.25);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(#fff, 0.06) 0 2px, transparent 2px 4px);
+    }
+  }
+
+  // 아래 바닥 그림자
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    left: 50%;
+    width: 379px;
+    height: 31px;
+    transform: translate(-50%, -50%);
+    background: rgba(85, 85, 85, 0.5);
+    filter: blur(5px);
+    border-radius: 50%;
+  }
+}

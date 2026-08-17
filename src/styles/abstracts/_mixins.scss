@@ -1,0 +1,59 @@
+@use 'tokens' as *;
+
+// ============================================================
+//  Typography mixins — 역할별 폰트 조합 (달무리 / Gmarket)
+//  사용 예:  h1 { @include type-hero; }
+// ============================================================
+
+// 달무리 regular 120px — hero h1
+@mixin type-hero {
+  font-family: $font-dalmoori;
+  font-weight: $fw-regular;
+  font-size: $fs-hero;
+  line-height: 1;
+}
+
+// 달무리 regular 40px
+@mixin type-display {
+  font-family: $font-dalmoori;
+  font-weight: $fw-regular;
+  font-size: $fs-display;
+  line-height: 1.1;
+}
+
+// Gmarket bold 40px
+@mixin type-heading {
+  font-family: $font-gmarket;
+  font-weight: $fw-bold;
+  font-size: $fs-display;
+  line-height: 1.2;
+}
+
+// Gmarket medium 30px
+@mixin type-title {
+  font-family: $font-gmarket;
+  font-weight: $fw-medium;
+  font-size: $fs-title;
+  line-height: 1.3;
+}
+
+// Gmarket light 24px — 본문
+@mixin type-body {
+  font-family: $font-gmarket;
+  font-weight: $fw-light;
+  font-size: $fs-body;
+  line-height: 1.6;
+}
+
+// 반응형 헬퍼
+@mixin below($bp) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+
+// 절대 채우기
+@mixin fill {
+  position: absolute;
+  inset: 0;
+}

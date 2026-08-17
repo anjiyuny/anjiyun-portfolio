@@ -1,0 +1,42 @@
+// ============================================================
+//  Design Tokens  —  색상 / 폰트 공통 관리 (여기만 고치면 전역 반영)
+// ============================================================
+
+// ---------- Colors ----------
+$color-primary: #1c28d7;
+$color-text: #333333;
+
+$color-point: #ff5fd0;
+$color-paper: #eef0f4;
+$color-white: #ffffff;
+$color-highlight: #fff23d;
+
+// 색상 맵 (필요 시 함수로 참조: color('primary'))
+$colors: (
+  'primary': $color-primary,
+  'text': $color-text,
+  'point': $color-point,
+  'paper': $color-paper,
+  'white': $color-white,
+  'highlight': $color-highlight,
+);
+
+// ---------- Font Families ----------
+$font-dalmoori: 'Dalmoori', sans-serif; // 달무리
+$font-gmarket: 'GmarketSans', sans-serif; // Gmarket Sans
+
+// ---------- Font Weights ----------
+$fw-light: 300; // Gmarket Light
+$fw-regular: 400; // 달무리 Regular
+$fw-medium: 500; // Gmarket Medium
+$fw-bold: 700; // Gmarket Bold
+
+// ---------- Font Sizes (역할별) ----------
+$fs-hero: 120px; // 달무리 regular — hero h1
+$fs-display: 40px; // 달무리 regular 40 / gmarket bold 40
+$fs-title: 30px; // gmarket medium
+$fs-body: 24px; // gmarket light
+
+// ---------- 기타 ----------
+$radius: 8px;
+$z-nav: 100;

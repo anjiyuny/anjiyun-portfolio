@@ -1,0 +1,21 @@
+@use '../abstracts/tokens' as *;
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: $color-primary;
+  color: $color-white;
+  z-index: $z-nav;
+
+  &__brand {
+    font-style: italic;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+  }
+}

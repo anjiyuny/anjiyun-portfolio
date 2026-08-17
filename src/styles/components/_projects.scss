@@ -1,0 +1,61 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/mixins' as *;
+
+.projects {
+  &__title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 65;
+    visibility: hidden;
+    white-space: nowrap;
+    @include type-hero;
+    font-size: clamp(36px, 5vw, 72px);
+    color: $color-primary;
+  }
+
+  // 카드 뒤 배경 반짝이
+  &__sparkles {
+    position: absolute;
+    inset: 0;
+    z-index: 56;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  &__sparkle {
+    position: absolute;
+    height: auto;
+    visibility: hidden;
+    will-change: transform, opacity;
+
+    &--1 {
+      left: 0;
+      top: 28px;
+      width: min(432px);
+      height: 288px;
+    }
+
+    &--2 {
+      right: -415px;
+      top: -70px;
+      width: min(1361px);
+      height: 907px;
+    }
+
+    &--3 {
+      left: 227px;
+      bottom: 26px;
+      width: min(510px);
+      height: 340px;
+    }
+  }
+
+  // 카드
+  &__cards {
+    position: absolute;
+    inset: 0;
+    z-index: 58;
+    pointer-events: none; // 카드 개별로 클릭 허용
+  }
+}
