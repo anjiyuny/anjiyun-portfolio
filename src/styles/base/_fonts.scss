@@ -25,7 +25,9 @@
   font-weight: 300;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/GmarketSansTTFLight.ttf') format('truetype');
+  src:
+    url('/fonts/GmarketSansTTFLight.woff2') format('woff2'),
+    url('/fonts/GmarketSansTTFLight.ttf') format('truetype');
 }
 
 @font-face {
@@ -33,7 +35,9 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/GmarketSansTTFMedium.ttf') format('truetype');
+  src:
+    url('/fonts/GmarketSansTTFMedium.woff2') format('woff2'),
+    url('/fonts/GmarketSansTTFMedium.ttf') format('truetype');
 }
 
 @font-face {
@@ -41,5 +45,7 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/GmarketSansTTFBold.ttf') format('truetype');
+  src:
+    url('/fonts/GmarketSansTTFBold.woff2') format('woff2'),
+    url('/fonts/GmarketSansTTFBold.ttf') format('truetype');
 }
