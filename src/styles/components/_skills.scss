@@ -3,23 +3,54 @@
 .skills {
   position: relative;
   height: 100vh;
-  background: $color-primary;
+  background: url(/images/main-backgroud.png) no-repeat;
+  background-size: cover;
   overflow: hidden;
 
-  &__stage { position: absolute; inset: 0; }
+  &__stage {
+    position: absolute;
+    inset: 0;
+  }
 
-  // 좌상단 Skills 라벨
   &__label {
     position: absolute;
-    top: 74px;
-    left: 22px;
+    top: 0;
+    left: 0;
     z-index: 60;
-    padding: 8px 16px;
-    border-radius: 8px;
-    background: $color-white;
-    color: $color-primary;
-    font: italic 800 26px/1 Georgia, 'Times New Roman', serif;
-    transform: rotate(-4deg);
-    box-shadow: 0 8px 18px rgba(#0a0a3c, .3);
+    width: 0;
+    height: 100%;
+  }
+
+  &__label-tag {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 121px;
+    height: 310px;
+    background-color: #262ea7;
+    z-index: 1;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 30px 30px 0px;
+  }
+
+  // 기둥
+  &__label-pillar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background-color: #262ea7;
+    z-index: 2;
+  }
+
+  &__label-img {
+    position: absolute;
+    left: 8px;
+    top: 40px;
+    width: 100px;
+    height: auto;
+    max-width: none;
+    z-index: 3;
   }
 }

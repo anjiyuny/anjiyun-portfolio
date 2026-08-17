@@ -147,28 +147,39 @@ gsap.utils.toArray('.card').forEach((card, i) => {
 });
 
 /* =========================================================
-    3) SKILLS — 폴더 가로 슬라이드 아코디언
+    3) SKILLS — 폴더 스택
    ========================================================= */
 const folders = gsap.utils.toArray('.folder');
 if (folders.length) {
   const N = folders.length;
-  const STRIP = 92,
-    ML = 60,
-    MR = 24;
+  const STRIP = 92; // 치워진 폴더가 왼쪽에 남기는 폭
+  const ML = 60; // 왼쪽 기둥(.skills__label-pillar) 폭
+  const MR = 60; // 오른쪽 탭(46px)이 잘리지 않게 남기는 여유
+
+  // 폴더별 폭 — 오른쪽을 얼마나 덜 채울지(px)를 폴더마다 지정한다.
+  // 0 이면 그 폴더가 최대 폭, 값이 클수록 그만큼 좁아진다.
+  // 앞(0번)이 제일 작아야 하므로 값이 점점 작아지는 순서로 둔다.
+  // 폭 자체가 아니라 여백으로 잡는 이유: 화면이 좁아져도, 왼쪽에 스트립이
+  // 쌓여 남는 공간이 줄어도 계단 간격이 그대로 유지된다.
+  const FOLDER_INSET = [630, 450, 270, 90];
+
   folders.forEach((f, i) => {
-    gsap.set(f, { zIndex: 30 - i });
+    gsap.set(f, { zIndex: 30 - i }); // 0번이 맨 위(= 가장 작음)
     f._content = f.querySelectorAll('.folder__head, .folder__list');
   });
 
+  // k = 현재 맨 앞에 있는 폴더 index
   const layout = (k) => {
-    const W = window.innerWidth;
-    const openW = W - ML - MR - (N - 1) * STRIP;
+    const baseLeft = ML + k * STRIP; // 왼쪽에 쌓인 스트립들이 차지한 폭
+    const maxW = window.innerWidth - baseLeft - MR; // 이 상태에서 쓸 수 있는 최대 폭
     return folders.map((_, j) => {
-      if (j < k) return { left: ML + j * STRIP, width: STRIP };
-      if (j === k) return { left: ML + k * STRIP, width: openW };
-      return { left: ML + k * STRIP + openW + (j - k - 1) * STRIP, width: STRIP };
+      if (j < k) return { left: ML + j * STRIP, width: STRIP }; // 왼쪽에 쌓임
+      // j >= k : left 는 같고, FOLDER_INSET 만큼씩 덜 채워서 계단을 만든다
+      const inset = FOLDER_INSET[j] ?? 0;
+      return { left: baseLeft, width: Math.max(STRIP, maxW - inset) };
     });
   };
+
   const applyState = (k) => {
     const L = layout(k);
     folders.forEach((f, j) => {
@@ -188,6 +199,7 @@ if (folders.length) {
       anticipatePin: 1,
     },
   });
+
   for (let k = 1; k < N; k++) {
     const L = layout(k);
     folders.forEach((f, j) => {

@@ -1,39 +1,47 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/mixins' as *;
 
-// 스킬 폴더 — 가로 슬라이드 아코디언. left/width/글자 표시는 JS.
+// 스킬 폴더
+// left / width 는 animations.js 의 layout() 이 계산한다 (스크롤 상태마다 달라짐)
 .folder {
   position: absolute;
   top: 50%;
-  height: 80vh;
+  height: 100vh;
   transform: translateY(-50%);
-  border-radius: 10px;
 
   // 내용 클립 영역 (좁아지면 잘림)
   &__clip {
     position: absolute;
     inset: 0;
     overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 22px 50px rgba(#0a0a3c, .3);
+    border-radius: 0 20px 0 0;
+    box-shadow: 0 22px 50px rgba(#0a0a3c, 0.3);
   }
 
   // 폴더 색 배경
   &__acc {
     position: absolute;
     inset: 0;
-    &--blue { background: $color-primary; }
-    &--point { background: $color-point; }
+    &--blue {
+      background: $color-blue;
+    }
+    &--point {
+      background: $color-point;
+    }
   }
 
   // 안쪽 흰 종이 (폴더를 꽉 채움)
   &__page {
     position: absolute;
-    top: 16px; left: 16px; right: 14px; bottom: 14px;
+    top: 0;
+    left: 0;
+    right: 50px;
+    bottom: 0px;
     padding: 44px 52px;
     overflow: hidden;
-    border-radius: 8px;
-    background: $color-paper;
+    background: url(/images/publishing-bg.png) no-repeat;
+    background-size: cover;
+    background-position: center;
   }
 
   &__head {
@@ -51,13 +59,14 @@
   &__cat {
     padding: 0 4px;
     white-space: nowrap;
-    @include type-heading;                 // Gmarket bold 40 (필요시 조정)
+    @include type-heading; // Gmarket bold 40 (필요시 조정)
     font-size: clamp(22px, 2.4vw, 34px);
     color: $color-primary;
     background: linear-gradient(transparent 55%, $color-highlight 55%); // 형광펜
   }
 
-  &__list { }
+  &__list {
+  }
   &__item {
     margin: 3.6% 0;
     white-space: nowrap;
@@ -79,11 +88,15 @@
     writing-mode: vertical-rl;
     text-orientation: mixed;
     font: 800 12px $font-gmarket;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     color: $color-white;
-    box-shadow: 0 12px 22px rgba(#0a0a3c, .25);
+    box-shadow: 0 12px 22px rgba(#0a0a3c, 0.25);
 
-    &--blue  { background: $color-primary; }
-    &--point { background: $color-point; }
+    &--blue {
+      background: $color-primary;
+    }
+    &--point {
+      background: $color-point;
+    }
   }
 }
