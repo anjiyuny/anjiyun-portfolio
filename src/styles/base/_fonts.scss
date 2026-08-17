@@ -4,8 +4,9 @@
 //    · 달무리       : https://noonnu.cc/font_page/619
 //    · Gmarket Sans : https://noonnu.cc/font_page/366
 //  Vite 는 public/ 안의 파일을 루트에서 서빙하므로 URL 은 /fonts/… 다.
-//  ('/public/fonts/…' 로 쓰면 dev 서버에서 404)
+//  ('/public/fonts/…' 로 쓰면 dev 서버가 경고를 낸다)
 //  format() 값은 확장자가 아니라 정해진 키워드다: woff2 / woff / truetype / opentype
+//  woff2 전용 — 2016 년 이후 모든 브라우저가 지원하므로 ttf/woff 폴백은 두지 않는다.
 // ============================================================
 
 @font-face {
@@ -13,10 +14,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src:
-    url('/fonts/dalmoori.woff2') format('woff2'),
-    url('/fonts/dalmoori.woff') format('woff'),
-    url('/fonts/dalmoori.ttf') format('truetype');
+  src: url('/fonts/dalmoori.woff2') format('woff2');
 }
 
 // Gmarket Sans — Light(300) / Medium(500) / Bold(700)
@@ -25,9 +23,7 @@
   font-weight: 300;
   font-style: normal;
   font-display: swap;
-  src:
-    url('/fonts/GmarketSansTTFLight.woff2') format('woff2'),
-    url('/fonts/GmarketSansTTFLight.ttf') format('truetype');
+  src: url('/fonts/GmarketSansTTFLight.woff2') format('woff2');
 }
 
 @font-face {
@@ -35,9 +31,7 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  src:
-    url('/fonts/GmarketSansTTFMedium.woff2') format('woff2'),
-    url('/fonts/GmarketSansTTFMedium.ttf') format('truetype');
+  src: url('/fonts/GmarketSansTTFMedium.woff2') format('woff2');
 }
 
 @font-face {
@@ -45,7 +39,5 @@
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-  src:
-    url('/fonts/GmarketSansTTFBold.woff2') format('woff2'),
-    url('/fonts/GmarketSansTTFBold.ttf') format('truetype');
+  src: url('/fonts/GmarketSansTTFBold.woff2') format('woff2');
 }
