@@ -5,11 +5,12 @@
 // left / width 는 animations.js 의 layout() 이 계산한다 (스크롤 상태마다 달라짐)
 .folder {
   position: absolute;
-  top: 50%;
-  height: 100vh;
-  transform: translateY(-50%);
+  top: 0; // ✅ 수정: 50% → 0
+  height: 100%; // ✅ 수정: 100vh → 100% (부모 stage 기준)
+  // ✅ 수정: transform: translateY(-50%) 제거
+  //    → transform 은 GSAP 의 x(좌측 슬라이드) 전용으로 비워둠
 
-  // 내용 클립 영역 (좁아지면 잘림)
+  // 내용 클립 영역 (좁아지면 잘림 / 왼쪽으로 밀려나가면 속지가 잘려나감)
   &__clip {
     position: absolute;
     inset: 0;
@@ -30,16 +31,23 @@
     }
   }
 
-  // 안쪽 흰 종이 (폴더를 꽉 채움)
+  // 안쪽 흰 종이
+  // right 값 = animations.js 의 STRIP 과 반드시 같게!
+  //   (왼쪽에 쌓였을 때 이 색 여백만 띠로 남는다)
   &__page {
     position: absolute;
     top: 0;
     left: 0;
-    right: 50px;
+    right: 40px; // 기본값(= JS 의 PAGE_R). 실제 값은 JS 가 덮어씀
     bottom: 0px;
-    padding: 44px 52px;
+    padding: 108px 52px 44px; // ✅ 상단 nav(56px) 아래로 내용 내림
+    //                          padding-left 는 JS 가 폴더 깊이만큼 덮어씀
     overflow: hidden;
-    background: url(/images/publishing-bg.png) no-repeat;
+    box-shadow: 3px 0 8px rgba(#0a0a3c, 0.18); // 종이 오른쪽 가장자리 음영
+    // 속지 이미지에 투명 여백이 있어도 종이색이 깔리도록 (불필요하면 삭제)
+    // background-color: $color-paper-2;
+    background-image: url(/images/publishing-bg.png);
+    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
   }
@@ -65,8 +73,6 @@
     background: linear-gradient(transparent 55%, $color-highlight 55%); // 형광펜
   }
 
-  &__list {
-  }
   &__item {
     margin: 3.6% 0;
     white-space: nowrap;
@@ -79,24 +85,26 @@
     position: absolute;
     left: 100%;
     margin-left: -2px;
-    width: 46px;
-    height: 150px;
+    width: 60px; // ★ 탭 폭 (JS 가 자동으로 읽어감)
+    height: 320px; // ★ 탭 높이
     border-radius: 0 10px 10px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    font: 800 12px $font-gmarket;
+    font: 800 16px $font-gmarket;
     letter-spacing: 0.5px;
     color: $color-white;
     box-shadow: 0 12px 22px rgba(#0a0a3c, 0.25);
 
     &--blue {
-      background: $color-primary;
+      background: $color-blue;
+      color: $color-white;
     }
     &--point {
       background: $color-point;
+      color: $color-blue; // 핑크 탭엔 파란 글자
     }
   }
 }

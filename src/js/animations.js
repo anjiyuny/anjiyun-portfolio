@@ -7,7 +7,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matche
 const floatScale = reduceMotion ? 0.4 : 1;
 
 /* =========================================================
-    1) 마우스 두둥실 (TV + 스마일) — 항상 실행
+   1) 마우스 두둥실 (TV + 스마일) — 항상 실행
    ========================================================= */
 const tvEl = document.querySelector('.tv'); // 두둥실 대상
 const smileEl = document.querySelector('.smile'); // 스마일 그룹도 동일 이동
@@ -37,7 +37,7 @@ function floatLoop(t) {
 requestAnimationFrame(floatLoop);
 
 /* =========================================================
-    2) HERO → PROJECTS 타임라인 (pin + scrub)
+   2) HERO → PROJECTS 타임라인 (pin + scrub)
    ========================================================= */
 gsap.set('.smile__icon', { xPercent: -50, yPercent: -50 });
 gsap.set('.projects__title', { xPercent: -50, yPercent: -50, visibility: 'visible', autoAlpha: 0 });
@@ -97,6 +97,7 @@ tl.to(
 );
 tl.to('.smile__icon', { autoAlpha: 0, duration: 0.25 }, 2.4);
 
+/* 카드 뒤 스파클 — 01 → 02 → 03 순서로 튀어나오며 커짐 */
 const SPARKLE_START = 2.55; // 카드 등장(2.8) 보다 살짝 먼저
 const SPARKLE_GAP = 1; // 01 → 02 → 03 간격
 const SPARKLE_FROM = [
@@ -147,47 +148,66 @@ gsap.utils.toArray('.card').forEach((card, i) => {
 });
 
 /* =========================================================
-    3) SKILLS — 폴더 스택
+    3) SKILLS — 중첩(nested) 스택 + 좌측 슬라이드
+    · 모든 폴더가 같은 left(ML) 에 겹쳐 있고, 뒤로 갈수록 width 가 크다
+      → 앞 폴더가 뒤 폴더를 덮고, 오른쪽엔 탭만 계단처럼 노출
+    · 스크롤 1스텝 = 맨 앞 폴더가 왼쪽으로 슬라이드해 나가 띠로 쌓임
+      뒤 폴더는 '전혀 움직이지 않는다' → 원래 깔려 있던 게 그대로 드러남
    ========================================================= */
 const folders = gsap.utils.toArray('.folder');
 if (folders.length) {
   const N = folders.length;
-  const STRIP = 92; // 치워진 폴더가 왼쪽에 남기는 폭
+
   const ML = 60; // 왼쪽 기둥(.skills__label-pillar) 폭
-  const MR = 60; // 오른쪽 탭(46px)이 잘리지 않게 남기는 여유
 
-  // 폴더별 폭 — 오른쪽을 얼마나 덜 채울지(px)를 폴더마다 지정한다.
-  // 0 이면 그 폴더가 최대 폭, 값이 클수록 그만큼 좁아진다.
-  // 앞(0번)이 제일 작아야 하므로 값이 점점 작아지는 순서로 둔다.
-  // 폭 자체가 아니라 여백으로 잡는 이유: 화면이 좁아져도, 왼쪽에 스트립이
-  // 쌓여 남는 공간이 줄어도 계단 간격이 그대로 유지된다.
-  const FOLDER_INSET = [630, 450, 270, 90];
+  // ★★ 왼쪽에 쌓였을 때 보이는 구성 — 이 두 값으로 조절 ★★
+  //   [ 속지(PEEK) | 폴더 색 여백(PAGE_R) | 탭(TABW) ]  ← 왼쪽부터 순서대로 보임
+  const PEEK = 64; //  쌓였을 때 '속지(종이)'가 보이는 폭
+  const PAGE_R = 40; //  속지 오른쪽에 남는 폴더 색 여백
+  const STRIP = PEEK + PAGE_R; // 폴더 몸통이 튀어나오는 폭 (자동 계산)
 
-  folders.forEach((f, i) => {
-    gsap.set(f, { zIndex: 30 - i }); // 0번이 맨 위(= 가장 작음)
-    f._content = f.querySelectorAll('.folder__head, .folder__list');
-  });
+  // 탭 폭은 CSS(.folder__tab width)에서 자동으로 읽음 → CSS만 바꿔도 계산이 맞음
+  const TABW = folders[0].querySelector('.folder__tab')?.offsetWidth || 60;
 
-  // k = 현재 맨 앞에 있는 폴더 index
-  const layout = (k) => {
-    const baseLeft = ML + k * STRIP; // 왼쪽에 쌓인 스트립들이 차지한 폭
-    const maxW = window.innerWidth - baseLeft - MR; // 이 상태에서 쓸 수 있는 최대 폭
-    return folders.map((_, j) => {
-      if (j < k) return { left: ML + j * STRIP, width: STRIP }; // 왼쪽에 쌓임
-      // j >= k : left 는 같고, FOLDER_INSET 만큼씩 덜 채워서 계단을 만든다
-      const inset = FOLDER_INSET[j] ?? 0;
-      return { left: baseLeft, width: Math.max(STRIP, maxW - inset) };
-    });
+  // 왼쪽 더미가 '시작되는 x'.
+  //  ※ .skills__label-tag(파란 라벨 귀)가 기둥보다 넓어서, 기둥 폭(ML)에서 시작하면
+  //    쌓인 폴더의 속지가 그 귀 뒤에 가려진다 → 귀 폭만큼 밀어서 시작.
+  const EAR = document.querySelector('.skills__label-tag')?.offsetWidth || 0;
+  const PILE_L = Math.max(ML, EAR);
+
+  // 쌓인 폴더 1장이 실제로 차지하는 총 폭 = 속지 + 색여백 + 탭
+  //  ※ 탭이 폴더 오른쪽 '바깥'으로 튀어나오므로 반드시 더해줘야
+  //    다음 폴더의 속지를 가리지 않는다.
+  const PITCH = PEEK + PAGE_R + TABW;
+  const MR = TABW + 24; // 오른쪽 여유 (맨 뒤 폴더 탭이 잘리지 않게)
+
+  // 폴더별 '오른쪽 여백(px)'. 값이 클수록 좁다.
+  // 앞(0번)이 가장 좁아야 하므로 큰 값 → 작은 값 순서. 차이값(180)이 탭 계단 간격.
+  const FOLDER_INSET = [540, 360, 180, 0];
+
+  const widthOf = (j) => {
+    const maxW = window.innerWidth - ML - MR;
+    return Math.max(STRIP, maxW - (FOLDER_INSET[j] ?? 0));
   };
 
-  const applyState = (k) => {
-    const L = layout(k);
+  // 폴더 j 가 왼쪽에 쌓였을 때의 x 이동량
+  //   j번째 자리 시작 = PILE_L + PITCH*j,  그 자리에서 몸통(STRIP)만큼 뒤가 오른쪽 끝.
+  //   → 각 폴더가 [속지 PEEK | 색 PAGE_R | 탭 TABW] 를 겹치지 않고 차지한다.
+  const pileX = (j) => PILE_L + PITCH * j + STRIP - (ML + widthOf(j));
+
+  // 초기 배치 — left 는 전부 동일, width 만 뒤로 갈수록 크게, 앞이 위(z 높음)
+  const layout = () => {
     folders.forEach((f, j) => {
-      gsap.set(f, L[j]);
-      gsap.set(f._content, { autoAlpha: j === k ? 1 : 0 });
+      gsap.set(f, { left: ML, width: widthOf(j), zIndex: N - j });
+      gsap.set(f.querySelector('.folder__page'), {
+        right: PAGE_R, // 속지 오른쪽 색 여백 (JS 가 단일 관리)
+        // 왼쪽에 쌓인 띠 + 탭에 글자가 가리지 않도록 깊이만큼 왼쪽 여백 확보
+        paddingLeft: 52 + (PILE_L - ML) + j * PITCH,
+      });
     });
   };
-  applyState(0);
+  layout();
+  window.addEventListener('resize', layout);
 
   const skillsTL = gsap.timeline({
     scrollTrigger: {
@@ -197,23 +217,15 @@ if (folders.length) {
       scrub: 1,
       pin: true,
       anticipatePin: 1,
+      invalidateOnRefresh: true,
     },
   });
 
-  for (let k = 1; k < N; k++) {
-    const L = layout(k);
-    folders.forEach((f, j) => {
-      skillsTL.to(
-        f,
-        { left: L[j].left, width: L[j].width, ease: 'power2.inOut', duration: 1 },
-        k - 1
-      );
-      skillsTL.to(
-        f._content,
-        { autoAlpha: j === k ? 1 : 0, duration: 0.5, ease: 'power1.inOut' },
-        k - 1 + (j === k ? 0.4 : 0)
-      );
-    });
+  // 스크롤 1스텝 = 맨 앞 폴더 1장이 왼쪽으로 슬라이드
+  // (속지는 폴더와 함께 밀려나 .folder__clip 의 overflow 에 잘리고,
+  //  오른쪽에 남겨둔 색 여백만 띠로 남는다 → opacity 조작 불필요)
+  for (let j = 0; j < N - 1; j++) {
+    skillsTL.to(folders[j], { x: () => pileX(j), ease: 'power2.inOut', duration: 1 }, j);
   }
 }
 
