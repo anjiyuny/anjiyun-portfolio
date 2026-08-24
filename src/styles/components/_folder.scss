@@ -56,6 +56,12 @@
     &--fe::after {
       background-image: url(/images/bg_frontend.png);
     }
+    &--de::after {
+      background-image: url(/images/bg_design.png);
+    }
+    &--cb::after {
+      background-image: url(/images/bg_collaboration.png);
+    }
   }
 
   &__text {
@@ -75,11 +81,11 @@
     color: $color-primary;
     padding: 0 5px;
     background: linear-gradient(transparent 55%, $color-highlight 55%);
-    margin-bottom: 150px;
+    margin-bottom: 154px;
   }
 
   &__item {
-    margin: 3.6% 0;
+    margin-bottom: 40px;
     white-space: nowrap;
     @include type-title;
     color: $color-primary;
@@ -118,6 +124,22 @@
     &--point {
       background: $color-point;
       color: $color-blue;
+    }
+    &--pb {
+      top: 170px;
+      height: 310px;
+    }
+    &--fe {
+      top: 80px;
+      height: 310px;
+    }
+    &--de {
+      top: 200px;
+      height: 240px;
+    }
+    &--cb {
+      top: 116px;
+      height: 400px;
     }
   }
 }
