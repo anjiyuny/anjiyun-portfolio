@@ -69,8 +69,7 @@
   }
 
   &__icon {
-    width: 60px;
-    height: 60px;
+    display: block;
     margin-bottom: 20px;
   }
 
@@ -111,19 +110,17 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     z-index: -1;
 
-    span img {
-      width: 32px;
-      height: 32px;
+    i {
       margin-bottom: 12px;
     }
 
     &--blue {
       background: $color-blue;
-      color: $color-white;
+      color: $color-pink;
     }
     &--point {
       background: $color-point;
-      color: $color-blue;
+      color: $color-primary;
     }
     &--pb {
       top: 170px;
@@ -141,5 +138,18 @@
       top: 116px;
       height: 400px;
     }
+  }
+
+  &:last-of-type::before {
+    content: '';
+    position: absolute;
+    bottom: 115px;
+    right: -82px;
+    width: 184px;
+    height: 275px;
+    background: url(/images/clip.png) no-repeat center / cover;
+    z-index: 2;
+    pointer-events: none;
+    transform: rotate(5deg);
   }
 }

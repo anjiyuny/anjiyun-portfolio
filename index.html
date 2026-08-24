@@ -132,109 +132,177 @@
         </article>
       </div>
     </section>
-    <!-- ================= SKILLS ================= -->
-    <section class="skills">
-      <div class="skills__label">
-        <span class="skills__label-tag"></span>
-        <span class="skills__label-pillar"></span>
-        <img class="skills__label-img" src="/images/skill_label.png" alt="Skills" />
-      </div>
 
-      <div class="skills__stage">
-        <!-- PUBLISHING -->
-        <article class="folder">
-          <div class="folder__clip">
-            <div class="folder__acc folder__acc--point"></div>
-            <div class="folder__page folder__page--pb">
-              <div class="folder__text">
-                <span class="folder__icon">
-                  <img src="/images/icon/ico-publishing.svg" alt="" />
-                </span>
-                <h2 class="folder__cat">PUBLISHING</h2>
-                <ul class="folder__list">
-                  <li class="folder__item">HTML5</li>
-                  <li class="folder__item">CSS3</li>
-                  <li class="folder__item">SCSS</li>
-                  <li class="folder__item">Web Accessibility</li>
-                  <li class="folder__item">Cross Browsing</li>
-                </ul>
+    <!-- =========================================================
+         SKILLS + CONTACT
+         두 섹션을 .skills-wrap 으로 묶어서 함께 pin 한다.
+         · 폴더 4장이 차례로 왼쪽으로 슬라이드
+         · 마지막 폴더가 멈추면 .contact 가 오른쪽에서 밀고 들어옴
+         ========================================================= -->
+    <div class="skills-wrap">
+      <!-- ================= SKILLS ================= -->
+      <section class="skills">
+        <div class="skills__label">
+          <span class="skills__label-tag"></span>
+          <span class="skills__label-pillar"></span>
+          <img class="skills__label-img" src="/images/skill_label.png" alt="Skills" />
+        </div>
+
+        <div class="skills__stage">
+          <!-- PUBLISHING -->
+          <article class="folder">
+            <div class="folder__clip">
+              <div class="folder__acc folder__acc--point"></div>
+              <div class="folder__page folder__page--pb">
+                <div class="folder__text">
+                  <span class="folder__icon">
+                    <i class="ico ico--publishing ico--lg ico--primary" aria-hidden="true"></i>
+                  </span>
+                  <h2 class="folder__cat">PUBLISHING</h2>
+                  <ul class="folder__list">
+                    <li class="folder__item">HTML5</li>
+                    <li class="folder__item">CSS3</li>
+                    <li class="folder__item">SCSS</li>
+                    <li class="folder__item">Web Accessibility</li>
+                    <li class="folder__item">Cross Browsing</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="folder__tab folder__tab--point folder__tab--pb">
-            <span><img src="/images/icon/ico-publishing.svg" alt="" /></span>
-            PUBLISHING
-          </div>
-        </article>
+            <div class="folder__tab folder__tab--point folder__tab--pb">
+              <i class="ico ico--publishing ico--sm ico--primary" aria-hidden="true"></i>
+              PUBLISHING
+            </div>
+          </article>
 
-        <!-- FRONT-END -->
-        <article class="folder">
-          <div class="folder__clip">
-            <div class="folder__acc folder__acc--blue"></div>
-            <div class="folder__page folder__page--fe">
-              <div class="folder__text">
-                <span class="folder__icon">
-                  <img src="/images/icon/ico-frontend.svg" alt="" />
-                </span>
-                <h2 class="folder__cat">FRONT-END</h2>
-                <ul class="folder__list">
-                  <li class="folder__item">JavaScript</li>
-                  <li class="folder__item">jQuery</li>
-                  <li class="folder__item">Vue</li>
-                  <li class="folder__item">GSAP</li>
-                </ul>
+          <!-- FRONT-END -->
+          <article class="folder">
+            <div class="folder__clip">
+              <div class="folder__acc folder__acc--blue"></div>
+              <div class="folder__page folder__page--fe">
+                <div class="folder__text">
+                  <span class="folder__icon">
+                    <i class="ico ico--frontend ico--lg ico--primary" aria-hidden="true"></i>
+                  </span>
+                  <h2 class="folder__cat">FRONT-END</h2>
+                  <ul class="folder__list">
+                    <li class="folder__item">JavaScript</li>
+                    <li class="folder__item">jQuery</li>
+                    <li class="folder__item">Vue</li>
+                    <li class="folder__item">GSAP</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="folder__tab folder__tab--blue folder__tab--fe">FRONT-END</div>
-        </article>
+            <div class="folder__tab folder__tab--blue folder__tab--fe">
+              <i class="ico ico--frontend ico--sm ico--pink" aria-hidden="true"></i>
+              FRONT-END
+            </div>
+          </article>
 
-        <!-- DESIGN -->
-        <article class="folder">
-          <div class="folder__clip">
-            <div class="folder__acc folder__acc--point"></div>
-            <div class="folder__page folder__page--de">
-              <div class="folder__text">
-                <span class="folder__icon">
-                  <img src="/images/icon/ico-design.svg" alt="" />
-                </span>
-                <h2 class="folder__cat">DESIGN</h2>
-                <ul class="folder__list">
-                  <li class="folder__item">Figma</li>
-                  <li class="folder__item">Photoshop</li>
-                  <li class="folder__item">Illustrator</li>
-                  <li class="folder__item">XD</li>
-                </ul>
+          <!-- DESIGN -->
+          <article class="folder">
+            <div class="folder__clip">
+              <div class="folder__acc folder__acc--point"></div>
+              <div class="folder__page folder__page--de">
+                <div class="folder__text">
+                  <span class="folder__icon">
+                    <i class="ico ico--design ico--lg ico--primary" aria-hidden="true"></i>
+                  </span>
+                  <h2 class="folder__cat">DESIGN</h2>
+                  <ul class="folder__list">
+                    <li class="folder__item">Figma</li>
+                    <li class="folder__item">Photoshop</li>
+                    <li class="folder__item">Illustrator</li>
+                    <li class="folder__item">XD</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="folder__tab folder__tab--point folder__tab--de">DESIGN</div>
-        </article>
+            <div class="folder__tab folder__tab--point folder__tab--de">
+              <i class="ico ico--design ico--sm ico--primary" aria-hidden="true"></i>
+              DESIGN
+            </div>
+          </article>
 
-        <!-- COLLABORATION -->
-        <article class="folder">
-          <div class="folder__clip">
-            <div class="folder__acc folder__acc--blue"></div>
-            <div class="folder__page folder__page--cb">
-              <div class="folder__text">
-                <span class="folder__icon">
-                  <img src="/images/icon/ico-collaboration.svg" alt="" />
-                </span>
-                <h2 class="folder__cat">COLLABORATION</h2>
-                <ul class="folder__list">
-                  <li class="folder__item">Git</li>
-                  <li class="folder__item">GitHub</li>
-                  <li class="folder__item">Notion</li>
-                  <li class="folder__item">Gitlab</li>
-                  <li class="folder__item">Jira</li>
-                </ul>
+          <!-- COLLABORATION -->
+          <article class="folder">
+            <div class="folder__clip">
+              <div class="folder__acc folder__acc--blue"></div>
+              <div class="folder__page folder__page--cb">
+                <div class="folder__text">
+                  <span class="folder__icon">
+                    <i class="ico ico--collaboration ico--lg ico--primary" aria-hidden="true"></i>
+                  </span>
+                  <h2 class="folder__cat">COLLABORATION</h2>
+                  <ul class="folder__list">
+                    <li class="folder__item">Git</li>
+                    <li class="folder__item">GitHub</li>
+                    <li class="folder__item">Notion</li>
+                    <li class="folder__item">Gitlab</li>
+                    <li class="folder__item">Jira</li>
+                  </ul>
+                </div>
               </div>
             </div>
+            <div class="folder__tab folder__tab--blue folder__tab--cb">
+              <i class="ico ico--collaboration ico--sm ico--pink" aria-hidden="true"></i>
+              COLLABORATION
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= CONTACT ================= -->
+      <section class="contact" id="contact">
+        <div class="contact__inner">
+          <p class="contact__role">Web Publisher</p>
+          <h2 class="contact__name">AN JIYOON</h2>
+
+          <div class="contact__box">
+            <p class="contact__msg">
+              변화를 전제로 설계하고,<br />
+              누구에게나 닿을 수 있는 화면을 만듭니다.
+            </p>
+            <p class="contact__msg">
+              더 나은 웹 경험을 함께 만들어갈<br />
+              새로운 기회와 이야기를 기다리고 있습니다.
+            </p>
+
+            <dl class="contact__info">
+              <dt>E-MAIL</dt>
+              <dd><a href="mailto:jiyoonan98@gmail.com">jiyoonan98@gmail.com</a></dd>
+              <dt>Git-Hub</dt>
+              <dd>
+                <a href="https://github.com/anjiyuny" target="_blank" rel="noopener">
+                  https://github.com/anjiyuny
+                </a>
+              </dd>
+            </dl>
           </div>
-          <div class="folder__tab folder__tab--blue folder__tab--cb">COLLABORATION</div>
-        </article>
-      </div>
-    </section>
+        </div>
+
+        <!-- 장식 -->
+        <div class="contact__deco" aria-hidden="true">
+          <img
+            class="contact__sparkle contact__sparkle--1"
+            src="/images/contact_sparkle_w1.png"
+            alt=""
+          />
+          <img
+            class="contact__sparkle contact__sparkle--2"
+            src="/images/contact_sparkle_lime.png"
+            alt=""
+          />
+          <img
+            class="contact__sparkle contact__sparkle--3"
+            src="/images/contact_sparkle_w2.png"
+            alt=""
+          />
+          <img class="contact__smile" src="/images/contact_smile.png" alt="" />
+        </div>
+      </section>
+    </div>
 
     <script type="module" src="/src/main.js"></script>
   </body>

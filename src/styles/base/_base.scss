@@ -2,8 +2,10 @@
 @use '../abstracts/mixins' as *;
 
 body {
-  @include type-body;              // 기본 본문 = Gmarket light 24
-  color: $color-text;              // 본문 #333
+  @include type-body; // 기본 본문 = Gmarket light 24
+  color: $color-text; // 본문 #333
   background: $color-paper;
-  overflow-x: hidden;
+  // overflow-x: hidden;
+
+  overflow-x: clip; // hidden → clip
 }

@@ -2,7 +2,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
-
+window.gsap = gsap;
+window.ScrollTrigger = ScrollTrigger;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 const floatScale = reduceMotion ? 0.4 : 1;
 
@@ -148,11 +149,13 @@ gsap.utils.toArray('.card').forEach((card, i) => {
 });
 
 /* =========================================================
-    3) SKILLS — 중첩(nested) 스택 + 좌측 슬라이드
+    3) SKILLS → CONTACT — 중첩(nested) 스택 + 좌측 슬라이드 + 우측 와이프
     · 모든 폴더가 같은 left(ML) 에 겹쳐 있고, 뒤로 갈수록 width 가 크다
       → 앞 폴더가 뒤 폴더를 덮고, 오른쪽엔 탭만 계단처럼 노출
     · 스크롤 1스텝 = 맨 앞 폴더가 왼쪽으로 슬라이드해 나가 띠로 쌓임
       뒤 폴더는 '전혀 움직이지 않는다' → 원래 깔려 있던 게 그대로 드러남
+    · 마지막(4번째) 폴더까지 쌓이고 나면
+      .contact 가 오른쪽에서 왼쪽으로 밀고 들어와 화면을 덮는다
    ========================================================= */
 const folders = gsap.utils.toArray('.folder');
 if (folders.length) {
@@ -162,7 +165,7 @@ if (folders.length) {
 
   // ★★ 왼쪽에 쌓였을 때 보이는 구성 — 이 두 값으로 조절 ★★
   //   [ 속지(PEEK) | 폴더 색 여백(PAGE_R) | 탭(TABW) ]  ← 왼쪽부터 순서대로 보임
-  const PEEK = 64; //  쌓였을 때 '속지(종이)'가 보이는 폭
+  const PEEK = 100; //  쌓였을 때 '속지(종이)'가 보이는 폭
   const PAGE_R = 0; //  속지 오른쪽에 남는 폴더 색 여백
   const STRIP = PEEK + PAGE_R; // 폴더 몸통이 튀어나오는 폭 (자동 계산)
 
@@ -182,9 +185,7 @@ if (folders.length) {
   const MR = TABW + 24; // 오른쪽 여유 (맨 뒤 폴더 탭이 잘리지 않게)
 
   // 폴더별 '오른쪽 여백(px)'. 값이 클수록 좁다.
-  // 앞(0번)이 가장 좁아야 하므로 큰 값 → 작은 값 순서. 차이값(180)이 탭 계단 간격.
-  // const FOLDER_INSET = [630, 450, 270, 90];
-  // const FOLDER_INSET = [540, 360, 180, 0];
+  // 앞(0번)이 가장 좁아야 하므로 큰 값 → 작은 값 순서. 차이값(173)이 탭 계단 간격.
   const FOLDER_INSET = [519, 346, 173, 0];
 
   const widthOf = (j) => {
@@ -210,11 +211,18 @@ if (folders.length) {
   layout();
   window.addEventListener('resize', layout);
 
+  /* ── 스크롤 길이 배분 ─────────────────────────────
+     폴더 N장 × 1스텝  +  Contact 와이프 WIPE_DUR스텝
+     STEP_PX 를 키우면 전체가 느긋해지고, 줄이면 빨라진다.        */
+  const STEP_PX = 640;
+  const WIPE_DUR = 1.4; // 와이프는 폴더 1스텝보다 살짝 길게
+  const TOTAL_STEPS = N + WIPE_DUR;
+
   const skillsTL = gsap.timeline({
     scrollTrigger: {
-      trigger: '.skills',
+      trigger: '.skills-wrap', // ← .skills 가 아니라 래퍼를 pin
       start: 'top top',
-      end: '+=' + N * 640,
+      end: '+=' + TOTAL_STEPS * STEP_PX,
       scrub: 1,
       pin: true,
       anticipatePin: 1,
@@ -222,12 +230,17 @@ if (folders.length) {
     },
   });
 
-  // 스크롤 1스텝 = 맨 앞 폴더 1장이 왼쪽으로 슬라이드
-  // (속지는 폴더와 함께 밀려나 .folder__clip 의 overflow 에 잘리고,
-  //  오른쪽에 남겨둔 색 여백만 띠로 남는다 → opacity 조작 불필요)
-  for (let j = 0; j < N - 1; j++) {
+  for (let j = 0; j < N; j++) {
     skillsTL.to(folders[j], { x: () => pileX(j), ease: 'power2.inOut', duration: 1 }, j);
   }
+
+  // 마지막 폴더가 멈춘 직후(position = N) → Contact 가 오른쪽에서 밀고 들어옴
+  skillsTL.fromTo(
+    '.contact',
+    { xPercent: 100 },
+    { xPercent: 0, ease: 'power2.inOut', duration: WIPE_DUR },
+    N
+  );
 }
 
 /* 카드 클릭 → 상세/팝업 (여기에 라우팅 또는 모달 연결) */

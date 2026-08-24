@@ -1,0 +1,60 @@
+@use 'sass:map';
+@use '../abstracts/tokens' as *;
+
+$icon-files: (
+  publishing: 'ico-publishing',
+  frontend: 'ico-frontend',
+  design: 'ico-design',
+  collaboration: 'ico-collaboration',
+);
+
+$icon-sizes: (
+  sm: 32px,
+  md: 44px,
+  lg: 60px,
+);
+
+$icon-colors: (
+  blue: $color-blue,
+  pink: $color-pink,
+  white: $color-white,
+  primary: $color-primary,
+);
+
+.ico {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+  width: map.get($icon-sizes, lg);
+  height: map.get($icon-sizes, lg);
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+
+  // 모양
+  @each $name, $file in $icon-files {
+    &--#{$name} {
+      -webkit-mask-image: url('/images/icon/#{$file}.svg');
+      mask-image: url('/images/icon/#{$file}.svg');
+    }
+  }
+
+  // 크기
+  @each $name, $size in $icon-sizes {
+    &--#{$name} {
+      width: $size;
+      height: $size;
+    }
+  }
+
+  // 색상
+  @each $name, $color in $icon-colors {
+    &--#{$name} {
+      background-color: $color;
+    }
+  }
+}
