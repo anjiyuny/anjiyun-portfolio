@@ -7,7 +7,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matche
 const floatScale = reduceMotion ? 0.4 : 1;
 
 /* =========================================================
-   1) 마우스 두둥실 (TV + 스마일) — 항상 실행
+    1) 마우스 두둥실 (TV + 스마일) — 항상 실행
    ========================================================= */
 const tvEl = document.querySelector('.tv'); // 두둥실 대상
 const smileEl = document.querySelector('.smile'); // 스마일 그룹도 동일 이동
@@ -37,7 +37,7 @@ function floatLoop(t) {
 requestAnimationFrame(floatLoop);
 
 /* =========================================================
-   2) HERO → PROJECTS 타임라인 (pin + scrub)
+    2) HERO → PROJECTS 타임라인 (pin + scrub)
    ========================================================= */
 gsap.set('.smile__icon', { xPercent: -50, yPercent: -50 });
 gsap.set('.projects__title', { xPercent: -50, yPercent: -50, visibility: 'visible', autoAlpha: 0 });
@@ -163,7 +163,7 @@ if (folders.length) {
   // ★★ 왼쪽에 쌓였을 때 보이는 구성 — 이 두 값으로 조절 ★★
   //   [ 속지(PEEK) | 폴더 색 여백(PAGE_R) | 탭(TABW) ]  ← 왼쪽부터 순서대로 보임
   const PEEK = 64; //  쌓였을 때 '속지(종이)'가 보이는 폭
-  const PAGE_R = 40; //  속지 오른쪽에 남는 폴더 색 여백
+  const PAGE_R = 0; //  속지 오른쪽에 남는 폴더 색 여백
   const STRIP = PEEK + PAGE_R; // 폴더 몸통이 튀어나오는 폭 (자동 계산)
 
   // 탭 폭은 CSS(.folder__tab width)에서 자동으로 읽음 → CSS만 바꿔도 계산이 맞음
@@ -183,7 +183,9 @@ if (folders.length) {
 
   // 폴더별 '오른쪽 여백(px)'. 값이 클수록 좁다.
   // 앞(0번)이 가장 좁아야 하므로 큰 값 → 작은 값 순서. 차이값(180)이 탭 계단 간격.
-  const FOLDER_INSET = [540, 360, 180, 0];
+  // const FOLDER_INSET = [630, 450, 270, 90];
+  // const FOLDER_INSET = [540, 360, 180, 0];
+  const FOLDER_INSET = [519, 346, 173, 0];
 
   const widthOf = (j) => {
     const maxW = window.innerWidth - ML - MR;
@@ -200,9 +202,8 @@ if (folders.length) {
     folders.forEach((f, j) => {
       gsap.set(f, { left: ML, width: widthOf(j), zIndex: N - j });
       gsap.set(f.querySelector('.folder__page'), {
-        right: PAGE_R, // 속지 오른쪽 색 여백 (JS 가 단일 관리)
-        // 왼쪽에 쌓인 띠 + 탭에 글자가 가리지 않도록 깊이만큼 왼쪽 여백 확보
-        paddingLeft: 52 + (PILE_L - ML) + j * PITCH,
+        right: 40,
+        paddingLeft: 170 + (PILE_L - ML) + j * PITCH,
       });
     });
   };

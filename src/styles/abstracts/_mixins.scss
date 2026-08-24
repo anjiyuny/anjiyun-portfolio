@@ -1,10 +1,5 @@
 @use 'tokens' as *;
 
-// ============================================================
-//  Typography mixins — 역할별 폰트 조합 (달무리 / Gmarket)
-//  사용 예:  h1 { @include type-hero; }
-// ============================================================
-
 // 달무리 regular 120px — hero h1
 @mixin type-hero {
   font-family: $font-dalmoori;

@@ -8,8 +8,16 @@
   <body>
     <!-- ================= NAV ================= -->
     <nav class="nav">
-      <div class="nav__brand">Work</div>
-      <div class="nav__brand">Contact</div>
+      <div class="nav__brand">
+        <a href="">
+          <img src="/images/nav_work.png" alt="work" />
+        </a>
+      </div>
+      <div class="nav__brand">
+        <a href="">
+          <img src="/images/nav_contact.png" alt="contact" />
+        </a>
+      </div>
     </nav>
 
     <!-- ================= HERO ================= -->
@@ -134,83 +142,93 @@
       </div>
 
       <div class="skills__stage">
-        <!-- 폴더 순서 = 앞(가장 좁음) → 뒤(가장 넓음) -->
+        <!-- PUBLISHING -->
         <article class="folder">
           <div class="folder__clip">
             <div class="folder__acc folder__acc--point"></div>
-            <div class="folder__page">
-              <div class="folder__head">
-                <span class="folder__icon"
-                  ><img src="/images/icon/ico-publishing.svg" alt=""
-                /></span>
+            <div class="folder__page folder__page--pb">
+              <div class="folder__text">
+                <span class="folder__icon">
+                  <img src="/images/icon/ico-publishing.svg" alt="" />
+                </span>
                 <h2 class="folder__cat">PUBLISHING</h2>
+                <ul class="folder__list">
+                  <li class="folder__item">HTML5</li>
+                  <li class="folder__item">CSS3</li>
+                  <li class="folder__item">SCSS</li>
+                  <li class="folder__item">Web Accessibility</li>
+                  <li class="folder__item">Cross Browsing</li>
+                </ul>
               </div>
-              <ul class="folder__list">
-                <li class="folder__item">HTML5</li>
-                <li class="folder__item">CSS3</li>
-                <li class="folder__item">SCSS</li>
-                <li class="folder__item">Web Accessibility</li>
-                <li class="folder__item">Cross Browsing</li>
-              </ul>
             </div>
           </div>
-          <div class="folder__tab folder__tab--point" style="top: 7%">PUBLISHING</div>
+          <div class="folder__tab folder__tab--point" style="top: 7%">
+            <span><img src="/images/icon/ico-publishing.svg" alt="" /></span>
+            PUBLISHING
+          </div>
         </article>
 
+        <!-- FRONT-END -->
         <article class="folder">
           <div class="folder__clip">
             <div class="folder__acc folder__acc--blue"></div>
-            <div class="folder__page">
-              <div class="folder__head">
-                <span class="folder__icon">&lt;/&gt;</span>
+            <div class="folder__page folder__page--fe">
+              <div class="folder__text">
+                <span class="folder__icon">
+                  <img src="/images/icon/ico-frontend.svg" alt="" />
+                </span>
                 <h2 class="folder__cat">FRONT-END</h2>
+                <ul class="folder__list">
+                  <li class="folder__item">JavaScript</li>
+                  <li class="folder__item">jQuery</li>
+                  <li class="folder__item">Vue</li>
+                  <li class="folder__item">GSAP</li>
+                </ul>
               </div>
-              <ul class="folder__list">
-                <li class="folder__item">JavaScript</li>
-                <li class="folder__item">jQuery</li>
-                <li class="folder__item">Vue</li>
-                <li class="folder__item">GSAP</li>
-              </ul>
             </div>
           </div>
           <div class="folder__tab folder__tab--blue" style="top: 11%">FRONT-END</div>
         </article>
 
-        <!-- [내용 교체 지점] DESIGN -->
+        <!-- DESIGN -->
         <article class="folder">
           <div class="folder__clip">
             <div class="folder__acc folder__acc--point"></div>
             <div class="folder__page">
-              <div class="folder__head">
-                <span class="folder__icon">◨</span>
+              <div class="folder__text">
+                <span class="folder__icon">
+                  <img src="" alt="" />
+                </span>
                 <h2 class="folder__cat">DESIGN</h2>
+                <ul class="folder__list">
+                  <li class="folder__item">Figma</li>
+                  <li class="folder__item">Photoshop</li>
+                  <li class="folder__item">Illustrator</li>
+                  <li class="folder__item">XD</li>
+                </ul>
               </div>
-              <ul class="folder__list">
-                <li class="folder__item">Figma</li>
-                <li class="folder__item">Photoshop</li>
-                <li class="folder__item">Illustrator</li>
-                <li class="folder__item">XD</li>
-              </ul>
             </div>
           </div>
           <div class="folder__tab folder__tab--point" style="top: 15%">DESIGN</div>
         </article>
 
-        <!-- [내용 교체 지점] COLLABORATION -->
+        <!-- COLLABORATION -->
         <article class="folder">
           <div class="folder__clip">
             <div class="folder__acc folder__acc--blue"></div>
             <div class="folder__page">
-              <div class="folder__head">
-                <span class="folder__icon">⑃</span>
+              <div class="folder__text">
+                <span class="folder__icon">
+                  <img src="" alt="" />
+                </span>
                 <h2 class="folder__cat">COLLABORATION</h2>
+                <ul class="folder__list">
+                  <li class="folder__item">Git &amp; GitHub</li>
+                  <li class="folder__item">Notion</li>
+                  <li class="folder__item">Slack</li>
+                  <li class="folder__item">Figma</li>
+                </ul>
               </div>
-              <ul class="folder__list">
-                <li class="folder__item">Git &amp; GitHub</li>
-                <li class="folder__item">Notion</li>
-                <li class="folder__item">Slack</li>
-                <li class="folder__item">Figma</li>
-              </ul>
             </div>
           </div>
           <div class="folder__tab folder__tab--blue" style="top: 19%">COLLABORATION</div>
