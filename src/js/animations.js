@@ -157,9 +157,112 @@ gsap.utils.toArray('.card').forEach((card, i) => {
     · 마지막(4번째) 폴더까지 쌓이고 나면
       .contact 가 오른쪽에서 왼쪽으로 밀고 들어와 화면을 덮는다
    ========================================================= */
+
+/* =========================================================
+                    CONTACT 내부 시퀀스 
+========================================================= */
+
+// 시퀀스 내부 타이밍(단위 = 스텝). 값을 키우면 그 단계가 길어진다.
+const SEQ = {
+  ROLE: { at: 0, dur: 0.55 },
+  TYPE: { at: 0.6, stagger: 0.11 },
+  SPARK: { at: 1.8, stagger: 0.28, dur: 0.8 },
+  BOX: { at: 2.8, dur: 0.6 },
+  LINE: { at: 3.4, stagger: 0.4, dur: 0.55 },
+};
+
+// 타임라인 총 길이 계산용
+function measureContactSequence() {
+  const nSpark = document.querySelectorAll('.contact__sparkle, .contact__smile').length;
+  const nLine = document.querySelectorAll('.contact__msg, .contact__row').length;
+  return Math.max(
+    SEQ.SPARK.at + Math.max(0, nSpark - 1) * SEQ.SPARK.stagger + SEQ.SPARK.dur,
+    SEQ.BOX.at + SEQ.BOX.dur,
+    SEQ.LINE.at + Math.max(0, nLine - 1) * SEQ.LINE.stagger + SEQ.LINE.dur
+  );
+}
+
+function addContactSequence(tl, at) {
+  const section = document.querySelector('.contact');
+  if (!section) return 0;
+
+  // 이름을 글자 단위 span 으로 쪼갠다 (타이핑용)
+  const nameEl = section.querySelector('.contact__name-text');
+  if (nameEl && !nameEl.querySelector('.contact__char')) {
+    nameEl.innerHTML = [...nameEl.textContent]
+      .map((ch) => `<span class="contact__char">${ch === ' ' ? '&nbsp;' : ch}</span>`)
+      .join('');
+  }
+  const chars = gsap.utils.toArray('.contact__char');
+  const sparkles = gsap.utils.toArray('.contact__sparkle, .contact__smile');
+  const lines = gsap.utils.toArray('.contact__msg, .contact__row');
+  const ease = reduceMotion ? 'power2.out' : 'back.out(1.5)';
+
+  // 1) Web Publisher — 아래에서 위로
+  tl.from(
+    '.contact__role',
+    { y: 28, autoAlpha: 0, duration: SEQ.ROLE.dur, ease: 'power2.out' },
+    at + SEQ.ROLE.at
+  );
+
+  // 2) 이름 — 한 글자씩
+  gsap.set(chars, { autoAlpha: 0 });
+  tl.to(
+    chars,
+    { autoAlpha: 1, duration: 0.01, ease: 'none', stagger: SEQ.TYPE.stagger },
+    at + SEQ.TYPE.at
+  );
+
+  // 3) 타이핑이 끝난 시점부터 커서 깜빡임 시작 (되감으면 다시 꺼짐)
+  const typeEnd = SEQ.TYPE.at + chars.length * SEQ.TYPE.stagger;
+  tl.set('.contact__caret', { visibility: 'visible' }, at + typeEnd);
+
+  // 4) 스파클 — 01 → 02 → 03 → 스마일 순서로 중앙에서 커지며 등장
+  tl.fromTo(
+    sparkles,
+    { autoAlpha: 0, scale: reduceMotion ? 0.9 : 0.35, rotation: reduceMotion ? 0 : -12 },
+    {
+      autoAlpha: 1,
+      scale: 1,
+      rotation: 0,
+      duration: SEQ.SPARK.dur,
+      ease,
+      stagger: SEQ.SPARK.stagger,
+      transformOrigin: '50% 50%',
+    },
+    at + SEQ.SPARK.at
+  );
+
+  // 5) 창(박스)
+  tl.fromTo(
+    '.contact__box',
+    { autoAlpha: 0, scaleY: 0.9, transformOrigin: '50% 0%' },
+    { autoAlpha: 1, scaleY: 1, duration: SEQ.BOX.dur, ease: 'power2.out' },
+    at + SEQ.BOX.at
+  );
+
+  // 6) 창 안 문장 — 한 줄씩 아래에서 위로
+  tl.from(
+    lines,
+    { y: 24, autoAlpha: 0, duration: SEQ.LINE.dur, ease: 'power2.out', stagger: SEQ.LINE.stagger },
+    at + SEQ.LINE.at
+  );
+
+  // 시퀀스 전체 길이(스텝) — 타임라인 총 길이 계산에 쓴다
+  return Math.max(
+    SEQ.SPARK.at + (sparkles.length - 1) * SEQ.SPARK.stagger + SEQ.SPARK.dur,
+    SEQ.BOX.at + SEQ.BOX.dur,
+    SEQ.LINE.at + (lines.length - 1) * SEQ.LINE.stagger + SEQ.LINE.dur
+  );
+}
+
 const folders = gsap.utils.toArray('.folder');
 if (folders.length) {
   const N = folders.length;
+
+  // Contact 초기 위치는 GSAP 이 전담한다.
+  // (CSS 에 transform: translateX(100%) 를 두면 xPercent 와 더해져 200% 가 된다)
+  gsap.set('.contact', { xPercent: 100 });
 
   const ML = 60; // 왼쪽 기둥(.skills__label-pillar) 폭
 
@@ -211,12 +314,24 @@ if (folders.length) {
   layout();
   window.addEventListener('resize', layout);
 
-  /* ── 스크롤 길이 배분 ─────────────────────────────
-     폴더 N장 × 1스텝  +  Contact 와이프 WIPE_DUR스텝
-     STEP_PX 를 키우면 전체가 느긋해지고, 줄이면 빨라진다.        */
-  const STEP_PX = 640;
-  const WIPE_DUR = 1.4; // 와이프는 폴더 1스텝보다 살짝 길게
-  const TOTAL_STEPS = N + WIPE_DUR;
+  /* ========================================
+                    스크롤 길이
+  =========================================== */
+  const STEP_PX = 1100; // 전체 속도 값
+  const LEAD = 0.8; // 섹션 진입 후 구간
+  const GAP = 0.35; // 폴더와 폴더 사이 간격
+  const WIPE_DUR = 1.6; // Contact 와이프 길이
+  const SETTLE = 0.4; // 와이프가 도착한 뒤 시퀀스 시작까지의 정지 구간
+
+  // 폴더 j 가 시작하는 타임라인 위치
+  const stepAt = (j) => LEAD + j * (1 + GAP);
+  const WIPE_AT = stepAt(N - 1) + 1; // 와이프 시작 위치
+  // Contact 가 화면에 완전히 도착한 뒤(+ SETTLE 만큼 쉬고) 시퀀스 시작
+  const SEQ_AT = WIPE_AT + WIPE_DUR + SETTLE;
+
+  // 시퀀스 길이는 요소 개수에 따라 달라지므로 미리 재본다
+  const SEQ_DUR = measureContactSequence();
+  const TOTAL_STEPS = Math.max(WIPE_AT + WIPE_DUR, SEQ_AT + SEQ_DUR) + 0.2;
 
   const skillsTL = gsap.timeline({
     scrollTrigger: {
@@ -231,16 +346,19 @@ if (folders.length) {
   });
 
   for (let j = 0; j < N; j++) {
-    skillsTL.to(folders[j], { x: () => pileX(j), ease: 'power2.inOut', duration: 1 }, j);
+    skillsTL.to(folders[j], { x: () => pileX(j), ease: 'power2.inOut', duration: 1 }, stepAt(j));
   }
 
-  // 마지막 폴더가 멈춘 직후(position = N) → Contact 가 오른쪽에서 밀고 들어옴
+  // 마지막 폴더가 멈춘 직후 → Contact 가 오른쪽에서 밀고 들어옴
   skillsTL.fromTo(
     '.contact',
     { xPercent: 100 },
     { xPercent: 0, ease: 'power2.inOut', duration: WIPE_DUR },
-    N
+    WIPE_AT
   );
+
+  // Contact 내부 시퀀스 — 같은 타임라인에 얹으므로 전부 스크롤에 반응한다
+  addContactSequence(skillsTL, SEQ_AT);
 }
 
 /* 카드 클릭 → 상세/팝업 (여기에 라우팅 또는 모달 연결) */

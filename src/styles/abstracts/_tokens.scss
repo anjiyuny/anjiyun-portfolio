@@ -8,6 +8,8 @@ $color-blue: #262ea7;
 $color-paper: #eef0f4;
 $color-white: #ffffff;
 $color-highlight: #fff23d;
+$color-lime: #b8e319;
+$color-black: #000000;
 
 // 색상 맵 (필요 시 함수로 참조: color('primary'))
 $colors: (
@@ -17,6 +19,8 @@ $colors: (
   'paper': $color-paper,
   'white': $color-white,
   'highlight': $color-highlight,
+  'lime': $color-lime,
+  'black': $color-black,
 );
 
 // ---------- Font Families ----------
@@ -32,7 +36,10 @@ $fw-bold: 700; // Gmarket Bold
 // ---------- Font Sizes (역할별) ----------
 $fs-hero: 120px; // 달무리 regular — hero h1
 $fs-display: 40px; // 달무리 regular 40 / gmarket bold 40
+$fs-Xlarge: 60px;
+$fs-large: 50px;
 $fs-title: 30px; // gmarket medium
+$fs-small: 20px; // gmarket small
 $fs-body: 24px; // gmarket light
 
 // ---------- 기타 ----------

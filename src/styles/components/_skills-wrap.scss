@@ -1,16 +1,11 @@
-// layout/_skills-wrap.scss
-// 기존 .skills / .skills__stage / .skills__label 은 절대 건드리지 않는다.
-
 .skills-wrap {
   position: relative;
-  overflow: hidden; // .contact 의 translateX(100%) 가 가로 스크롤 만들지 않게
+  overflow: hidden;
 }
 
-// .contact 는 래퍼 위에 겹쳐서 대기
 .contact {
   position: absolute;
   inset: 0;
-  z-index: 30;
-  transform: translateX(100%);
+  z-index: 100;
   will-change: transform;
 }

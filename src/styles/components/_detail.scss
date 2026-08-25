@@ -1,0 +1,337 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/mixins' as *;
+
+$stage-w: 1920px;
+$stage-h: 900px;
+$detail-shadow: 11px 11px 0 $color-blue;
+
+.detail {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url(/images/detail/bg_detail.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  // ---------- 무대 ----------
+  &__stage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: $stage-w;
+    height: $stage-h;
+    transform: translate(-50%, -50%) scale(var(--stage-scale, 1));
+    transform-origin: 50% 50%;
+  }
+
+  // ---------- 뒤로가기 ----------
+  &__back {
+    position: absolute;
+    left: 38px;
+    top: 32px;
+    z-index: 10;
+    display: block;
+    width: 76px;
+    height: 76px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    &:focus-visible {
+      outline: 4px solid $color-highlight;
+      outline-offset: 6px;
+    }
+  }
+
+  /* ---------- 1) 제목 ---------- */
+  &__title {
+    position: absolute;
+    left: 149px;
+    top: 123px;
+    width: 648px;
+    padding: 30px 0 30px 50px;
+    background: #2a4ba9;
+    border-radius: 10px;
+  }
+
+  &__name {
+    font-family: $font-gmarket;
+    font-weight: $fw-bold;
+    font-size: $fs-large;
+    line-height: 57px;
+    text-align: left;
+    color: #f2f2f2;
+    margin-bottom: 16px;
+  }
+
+  &__period {
+    font-family: $font-gmarket;
+    font-weight: $fw-light;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* ---------- 2) 프로젝트 이미지 ---------- */
+  &__window {
+    position: absolute;
+    left: 746px;
+    top: 65px;
+    width: 900px;
+    height: 521px;
+  }
+
+  /* ---------- 3) 사이트로 이동 ---------- */
+  &__link {
+    position: absolute;
+    left: 1587px;
+    top: 192px;
+    z-index: 5;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  &__cursor {
+    position: absolute;
+    width: 47px;
+    left: -22px;
+    bottom: 40px;
+    pointer-events: none;
+  }
+
+  &__link-btn {
+    display: inline-block;
+    padding: 12px 23px;
+    color: #f2f2f2;
+    font-family: $font-gmarket;
+    font-weight: $fw-medium;
+    font-size: 18px;
+    white-space: nowrap;
+    transition: transform 0.15s ease;
+    background: #dc64cf;
+    border: 3px solid #f3f3f3;
+    border-radius: 10px;
+  }
+
+  /* ---------- 4) 스킬 ---------- */
+  &__skills {
+    position: absolute;
+    width: 490px;
+    height: 275px;
+    left: 369px;
+    top: 358px;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+
+    li {
+      padding: 10px 25px;
+      border-radius: 999px;
+      background: #dc64cf;
+      color: $color-pink;
+      font-family: $font-gmarket;
+      font-weight: $fw-medium;
+      font-size: 22px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+  }
+
+  /* ---------- 5) 주요 업무 ---------- */
+  &__tasks {
+    position: absolute;
+    left: 1084px;
+    top: 499px;
+    width: 656px;
+  }
+
+  &__tasks-label {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    z-index: 2;
+    padding: 12px 57px;
+    background: #2a4ba9;
+    color: #f3f3f3;
+    font-family: $font-gmarket;
+    font-weight: $fw-medium;
+    font-size: 20px;
+    white-space: nowrap;
+    border: 3px solid #f3f3f3;
+    border-radius: 10px;
+  }
+
+  &__tasks-panel {
+    margin-left: 80px;
+    width: 566px;
+    height: 329px;
+    padding-top: 79px;
+    // padding: 79px 0 60px;
+    display: flex;
+    justify-content: center;
+    border: 3px solid $color-blue;
+    border-radius: 10px;
+    background: $color-pink;
+    box-shadow: $detail-shadow;
+  }
+
+  &__tasks-list li {
+    position: relative;
+    padding-left: 18px;
+    white-space: nowrap;
+    font-family: $font-gmarket;
+    font-weight: $fw-medium;
+    font-size: 18px;
+    color: $color-text;
+
+    + li {
+      margin-top: 10px;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 11px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: $color-text;
+    }
+  }
+}
+
+/* ---------- 창(윈도우) 공통 ---------- */
+.win {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  overflow: hidden;
+
+  &__bar {
+    flex: none;
+    height: 56px;
+    background: #dc64cf;
+    border: 2px solid #ffffff;
+    border-radius: 10px 10px 0px 0px;
+  }
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    padding: 32px 25px;
+    background: #ffe3f9;
+    border: 2px solid #1c28d7;
+    border-radius: 0px 0px 10px 10px;
+  }
+
+  &__screen {
+    width: 100%;
+    height: 100%;
+    background: #1f1f1f;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &--point .win__bar {
+    // width: 490px;
+    // height: 44px;
+  }
+
+  &--blue .win__bar {
+    height: 44px;
+    background: $color-blue;
+    border: 2px solid #ffffff;
+    border-radius: 10px 10px 0px 0px;
+  }
+
+  &--blue .win__body {
+    background: #f7f7f7;
+    border: 2px solid #1c28d7;
+    border-radius: 0px 0px 10px 10px;
+    padding: 30px 20px;
+  }
+}
+
+/* ---------- 모바일: 스케일 대신 세로 스택 ---------- */
+@media (max-width: 767px) {
+  .detail {
+    height: auto;
+    overflow: visible;
+    padding: 90px 20px 60px;
+
+    &__stage {
+      position: static;
+      width: auto;
+      height: auto;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    &__back {
+      position: fixed;
+      width: 48px;
+      height: 48px;
+    }
+
+    &__title,
+    &__window,
+    &__link,
+    &__skills,
+    &__tasks {
+      position: static;
+      left: auto;
+      top: auto;
+      width: 100%;
+    }
+
+    &__window {
+      height: 60vw;
+    }
+    &__skills {
+      height: auto;
+    }
+    &__cursor {
+      display: none;
+    }
+    &__name {
+      font-size: 28px;
+      line-height: 1.3;
+    }
+    &__period,
+    &__link-btn,
+    &__tasks-label {
+      font-size: 15px;
+    }
+    &__tags li {
+      font-size: 15px;
+      padding: 8px 16px;
+    }
+    &__tasks-panel {
+      margin-left: 0;
+      margin-top: 20px;
+      padding: 28px 20px;
+    }
+    &__tasks-label {
+      position: static;
+      display: inline-block;
+    }
+    &__tasks-list li {
+      font-size: 15px;
+      white-space: normal;
+    }
+  }
+}

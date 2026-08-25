@@ -1,12 +1,19 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+import fg from 'fast-glob';
 
-// GitHub Pages 는 https://anjiyuny.github.io/anjiyun-portfolio/ 하위 경로로 서빙되므로
-// build 시에만 base 를 붙인다. (dev 는 '/' 유지 — 안 그러면 로컬 주소가 지저분해짐)
 const REPO = '/anjiyun-portfolio/';
+
+// index.html + project/*.html 을 자동으로 전부 빌드 대상에 넣는다
+const pages = Object.fromEntries(
+  fg
+    .sync(['index.html', 'project/*.html'])
+    .map((f) => [f.replace(/\.html$/, '').replace(/\//g, '-'), resolve(process.cwd(), f)])
+);
 
 export default defineConfig(({ command }) => ({
   root: '.',
   base: command === 'build' ? REPO : '/',
   server: { open: true },
-  build: { outDir: 'dist' },
+  build: { outDir: 'dist', rollupOptions: { input: pages } },
 }));

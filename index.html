@@ -86,13 +86,15 @@
       <!-- 프로젝트 카드 -->
       <div class="projects__cards">
         <article class="card">
-          <div class="card__bar">
-            <img src="/images/window_btn.png" alt="" />
-          </div>
-          <div class="card__body">
-            <h3 class="card__title">Project<br />title</h3>
-            <div class="card__thumb"></div>
-          </div>
+          <a class="card__link" href="../project/lg-buying-guide.html">
+            <div class="card__bar">
+              <img src="/images/window_btn.png" alt="" />
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">Project<br />title</h3>
+              <div class="card__thumb"></div>
+            </div>
+          </a>
         </article>
         <article class="card">
           <div class="card__bar">
@@ -133,14 +135,8 @@
       </div>
     </section>
 
-    <!-- =========================================================
-         SKILLS + CONTACT
-         두 섹션을 .skills-wrap 으로 묶어서 함께 pin 한다.
-         · 폴더 4장이 차례로 왼쪽으로 슬라이드
-         · 마지막 폴더가 멈추면 .contact 가 오른쪽에서 밀고 들어옴
-         ========================================================= -->
+    <!-- ================= SKILLS ================= -->
     <div class="skills-wrap">
-      <!-- ================= SKILLS ================= -->
       <section class="skills">
         <div class="skills__label">
           <span class="skills__label-tag"></span>
@@ -253,11 +249,15 @@
         </div>
       </section>
 
-      <!-- ================= CONTACT ================= -->
+      <!-- ===============================
+                      CONTACT 
+        ================================== -->
       <section class="contact" id="contact">
         <div class="contact__inner">
           <p class="contact__role">Web Publisher</p>
-          <h2 class="contact__name">AN JIYOON</h2>
+          <h2 class="contact__name">
+            <span class="contact__name-text">AN JIYUN</span><span class="contact__caret">_</span>
+          </h2>
 
           <div class="contact__box">
             <p class="contact__msg">
@@ -270,14 +270,18 @@
             </p>
 
             <dl class="contact__info">
-              <dt>E-MAIL</dt>
-              <dd><a href="mailto:jiyoonan98@gmail.com">jiyoonan98@gmail.com</a></dd>
-              <dt>Git-Hub</dt>
-              <dd>
-                <a href="https://github.com/anjiyuny" target="_blank" rel="noopener">
-                  https://github.com/anjiyuny
-                </a>
-              </dd>
+              <div class="contact__row">
+                <dt>E-MAIL</dt>
+                <dd><a href="jiyoonan98@gmail.com">jiyoonan98@gmail.com</a></dd>
+              </div>
+              <div class="contact__row">
+                <dt>Git-Hub</dt>
+                <dd>
+                  <a href="https://github.com/anjiyuny" target="_blank" rel="noopener">
+                    https://github.com/anjiyuny
+                  </a>
+                </dd>
+              </div>
             </dl>
           </div>
         </div>
@@ -286,20 +290,20 @@
         <div class="contact__deco" aria-hidden="true">
           <img
             class="contact__sparkle contact__sparkle--1"
-            src="/images/contact_sparkle_w1.png"
+            src="/images/contact_sparkel_01.png"
             alt=""
           />
           <img
             class="contact__sparkle contact__sparkle--2"
-            src="/images/contact_sparkle_lime.png"
+            src="/images/contact_sparkel_03.png"
             alt=""
           />
           <img
             class="contact__sparkle contact__sparkle--3"
-            src="/images/contact_sparkle_w2.png"
+            src="/images/contact_sparkel_02.png"
             alt=""
           />
-          <img class="contact__smile" src="/images/contact_smile.png" alt="" />
+          <img class="contact__smile" src="/images/contact_sparkel_04.png" alt="" />
         </div>
       </section>
     </div>
