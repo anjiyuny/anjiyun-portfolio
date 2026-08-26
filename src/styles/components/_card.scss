@@ -49,11 +49,17 @@
     margin-bottom: 19px;
   }
 
-  // 실제 프로젝트 썸네일로 교체
   &__thumb {
     width: 100%;
     height: 240px;
-    // aspect-ratio: 1 / 0.92;
+    aspect-ratio: 1 / 0.92;
     background: #2c2c2c;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &--1 {
+      background-image: url(../../../public/images/detail/lg-buying-guide.png);
+    }
   }
 }

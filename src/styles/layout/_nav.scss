@@ -1,7 +1,6 @@
 @use '../abstracts/tokens' as *;
 
 .nav {
-  // position: fixed;
   inset: 0 0 auto 0;
   height: 60px;
   display: flex;
@@ -17,5 +16,9 @@
     font-weight: 800;
     font-size: 26px;
     letter-spacing: 0.5px;
+
+    img {
+      width: 120px;
+    }
   }
 }
