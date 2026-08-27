@@ -1,0 +1,16 @@
+.fitstage {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  margin-left: -960px;
+  width: 1920px;
+  height: calc(100% / var(--stage-scale, 1));
+  transform: scale(var(--stage-scale, 1));
+  transform-origin: 50% 0;
+}
+
+.fitstage--left {
+  left: 0;
+  margin-left: 0;
+  transform-origin: 0 0;
+}

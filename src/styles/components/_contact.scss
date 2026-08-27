@@ -6,11 +6,15 @@ $color-contact-bg: #000;
 
 .contact {
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: $color-contact-bg;
   color: $color-white;
+
+  // 무대(.fitstage)가 절대배치라 flex 중앙정렬은 무대 쪽에서 잡는다
+  .fitstage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   &__inner {
     position: relative;

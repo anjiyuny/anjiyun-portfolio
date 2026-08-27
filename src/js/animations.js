@@ -8,15 +8,32 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matche
 const floatScale = reduceMotion ? 0.4 : 1;
 
 /* =========================================================
-    1) 마우스 두둥실 (TV + 스마일) — 항상 실행
+    해상도 대응
    ========================================================= */
-const tvEl = document.querySelector('.tv'); // 두둥실 대상
-const smileEl = document.querySelector('.smile'); // 스마일 그룹도 동일 이동
+const STAGE_W = 1920; // 시안 가로 (_fitstage.scss 의 width 와 동일)
+let stageScale = 1;
+const stageH = () => window.innerHeight / stageScale; // 무대 좌표계에서의 화면 높이
+
+function fitStage() {
+  stageScale = Math.min(window.innerWidth / STAGE_W, 1); // 1920 보다 크게는 안 키움
+  document.documentElement.style.setProperty('--stage-scale', stageScale);
+}
+fitStage();
+window.addEventListener('resize', () => {
+  fitStage();
+  ScrollTrigger.refresh();
+});
+
+/* =========================================================
+    1) 마우스 두둥실 (TV + 스마일)
+   ========================================================= */
+const tvEl = document.querySelector('.tv');
+const smileEl = document.querySelector('.smile');
 let pMouseX = 0,
   pMouseY = 0,
   curX = 0,
   curY = 0;
-let floatAmount = 1; // 스크롤 시작 시 0으로 감소
+let floatAmount = 1;
 
 window.addEventListener('pointermove', (e) => {
   pMouseX = e.clientX / window.innerWidth - 0.5;
@@ -38,13 +55,13 @@ function floatLoop(t) {
 requestAnimationFrame(floatLoop);
 
 /* =========================================================
-    2) HERO → PROJECTS 타임라인 (pin + scrub)
+    2) HERO -> PROJECTS
    ========================================================= */
 gsap.set('.smile__icon', { xPercent: -50, yPercent: -50 });
 gsap.set('.projects__title', { xPercent: -50, yPercent: -50, visibility: 'visible', autoAlpha: 0 });
 
 // Projects 타이틀 최종 위치(상단). 숫자↑ = 더 아래.
-const PROJECTS_END_Y = () => -(window.innerHeight / 2 - 118);
+const PROJECTS_END_Y = () => -(stageH() / 2 - 118);
 
 const tl = gsap.timeline({
   scrollTrigger: {
@@ -54,6 +71,7 @@ const tl = gsap.timeline({
     scrub: 1,
     pin: true,
     anticipatePin: 1,
+    invalidateOnRefresh: true, // 리사이즈 시 stageH() 좌표 재계산
     onUpdate: (self) => {
       floatAmount = 1 - Math.min(self.progress / 0.15, 1);
     },
@@ -72,8 +90,8 @@ tl.to('.reveal', { width: 460, height: 460, ease: 'power1.inOut', duration: 0.6 
 tl.to(
   '.reveal',
   {
-    width: () => window.innerWidth,
-    height: () => window.innerHeight,
+    width: () => window.innerWidth / stageScale, // 무대 기준 풀스크린 크기
+    height: () => stageH(),
     ease: 'power2.inOut',
     duration: 0.85,
   },
@@ -87,15 +105,11 @@ tl.to('.tv__frame, .tv__screen', { autoAlpha: 0, duration: 0.6 }, 1.2);
 /* Phase C — Projects 타이틀 상단 고정 + 스마일 위로 */
 tl.fromTo(
   '.projects__title',
-  { y: () => window.innerHeight * 0.6, autoAlpha: 0 },
+  { y: () => stageH() * 0.6, autoAlpha: 0 },
   { y: PROJECTS_END_Y, autoAlpha: 1, ease: 'power2.out', duration: 0.9 },
   1.75
 );
-tl.to(
-  '.smile__icon',
-  { y: () => -window.innerHeight * 0.62, ease: 'power2.in', duration: 0.9 },
-  1.75
-);
+tl.to('.smile__icon', { y: () => -stageH() * 0.62, ease: 'power2.in', duration: 0.9 }, 1.75);
 tl.to('.smile__icon', { autoAlpha: 0, duration: 0.25 }, 2.4);
 
 /* 카드 뒤 스파클 — 01 → 02 → 03 순서로 튀어나오며 커짐 */
@@ -124,10 +138,10 @@ gsap.utils.toArray('.projects__sparkle').forEach((sp, i) => {
   );
 });
 
-/* Phase D — 카드가 '보이지 않는 물결 선'을 타고 우→좌로 이동 */
+/* Phase D — 카드 우 -> 좌 이동 */
 const WAVE = { A: 78, WAVELEN: 0.52, PHASE: 0.7, MIDY: 0.52, BANK: 0.4 };
-const waveK = () => (2 * Math.PI) / (window.innerWidth * WAVE.WAVELEN);
-const waveY = (x) => window.innerHeight * WAVE.MIDY + WAVE.A * Math.sin(waveK() * x + WAVE.PHASE);
+const waveK = () => (2 * Math.PI) / (STAGE_W * WAVE.WAVELEN);
+const waveY = (x) => stageH() * WAVE.MIDY + WAVE.A * Math.sin(waveK() * x + WAVE.PHASE);
 const waveDeg = (x) =>
   Math.atan(WAVE.A * waveK() * Math.cos(waveK() * x + WAVE.PHASE)) * (180 / Math.PI) * WAVE.BANK;
 const CARD_SLOTS = [0.13, 0.32, 0.5, 0.68, 0.87];
@@ -135,8 +149,8 @@ const CARD_SLOTS = [0.13, 0.32, 0.5, 0.68, 0.87];
 gsap.utils.toArray('.card').forEach((card, i) => {
   const cw = card.offsetWidth,
     ch = card.offsetHeight;
-  const slotCX = () => window.innerWidth * CARD_SLOTS[i];
-  const s = { cx: window.innerWidth + cw };
+  const slotCX = () => STAGE_W * CARD_SLOTS[i];
+  const s = { cx: STAGE_W + cw };
   const place = () => {
     const x = s.cx;
     gsap.set(card, { x: x - cw / 2, y: waveY(x) - ch / 2, rotation: waveDeg(x) });
@@ -144,25 +158,14 @@ gsap.utils.toArray('.card').forEach((card, i) => {
   place();
   gsap.set(card, { autoAlpha: 0 });
   const START = 2.8 + i * 0.65;
-  tl.to(s, { cx: slotCX(), ease: 'sine.out', duration: 2.0, onUpdate: place }, START);
+  // cx 는 함수로 — 리사이즈 시 목적지 재계산
+  tl.to(s, { cx: () => slotCX(), ease: 'sine.out', duration: 2.0, onUpdate: place }, START);
   tl.to(card, { autoAlpha: 1, duration: 0.55, ease: 'sine.out' }, START);
 });
 
 /* =========================================================
-    3) SKILLS → CONTACT — 중첩(nested) 스택 + 좌측 슬라이드 + 우측 와이프
-    · 모든 폴더가 같은 left(ML) 에 겹쳐 있고, 뒤로 갈수록 width 가 크다
-      → 앞 폴더가 뒤 폴더를 덮고, 오른쪽엔 탭만 계단처럼 노출
-    · 스크롤 1스텝 = 맨 앞 폴더가 왼쪽으로 슬라이드해 나가 띠로 쌓임
-      뒤 폴더는 '전혀 움직이지 않는다' → 원래 깔려 있던 게 그대로 드러남
-    · 마지막(4번째) 폴더까지 쌓이고 나면
-      .contact 가 오른쪽에서 왼쪽으로 밀고 들어와 화면을 덮는다
+    3) SKILLS → CONTACT
    ========================================================= */
-
-/* =========================================================
-                    CONTACT 내부 시퀀스 
-========================================================= */
-
-// 시퀀스 내부 타이밍(단위 = 스텝). 값을 키우면 그 단계가 길어진다.
 const SEQ = {
   ROLE: { at: 0, dur: 0.55 },
   TYPE: { at: 0.6, stagger: 0.11 },
@@ -186,7 +189,7 @@ function addContactSequence(tl, at) {
   const section = document.querySelector('.contact');
   if (!section) return 0;
 
-  // 이름을 글자 단위 span 으로 쪼갠다 (타이핑용)
+  // 알파벳 단위로 분할
   const nameEl = section.querySelector('.contact__name-text');
   if (nameEl && !nameEl.querySelector('.contact__char')) {
     nameEl.innerHTML = [...nameEl.textContent]
@@ -213,11 +216,11 @@ function addContactSequence(tl, at) {
     at + SEQ.TYPE.at
   );
 
-  // 3) 타이핑이 끝난 시점부터 커서 깜빡임 시작 (되감으면 다시 꺼짐)
+  // 3) 타이핑이 끝난 시점부터 커서 깜빡임 시작
   const typeEnd = SEQ.TYPE.at + chars.length * SEQ.TYPE.stagger;
   tl.set('.contact__caret', { visibility: 'visible' }, at + typeEnd);
 
-  // 4) 스파클 — 01 → 02 → 03 → 스마일 순서로 중앙에서 커지며 등장
+  // 4) 스파클
   tl.fromTo(
     sparkles,
     { autoAlpha: 0, scale: reduceMotion ? 0.9 : 0.35, rotation: reduceMotion ? 0 : -12 },
@@ -248,7 +251,7 @@ function addContactSequence(tl, at) {
     at + SEQ.LINE.at
   );
 
-  // 시퀀스 전체 길이(스텝) — 타임라인 총 길이 계산에 쓴다
+  // 시퀀스 전체 길이 — 타임라인 총 길이 계산
   return Math.max(
     SEQ.SPARK.at + (sparkles.length - 1) * SEQ.SPARK.stagger + SEQ.SPARK.dur,
     SEQ.BOX.at + SEQ.BOX.dur,
@@ -259,40 +262,35 @@ function addContactSequence(tl, at) {
 const folders = gsap.utils.toArray('.folder');
 if (folders.length) {
   const N = folders.length;
-
-  // Contact 초기 위치는 GSAP 이 전담한다.
-  // (CSS 에 transform: translateX(100%) 를 두면 xPercent 와 더해져 200% 가 된다)
-  gsap.set('.contact', { xPercent: 100 });
+  gsap.set('.contact', { xPercent: 100 }); // 초기 위치는 GSAP 이 전담 (CSS transform 과 합산 방지)
 
   const ML = 60; // 왼쪽 기둥(.skills__label-pillar) 폭
-
-  // ★★ 왼쪽에 쌓였을 때 보이는 구성 — 이 두 값으로 조절 ★★
-  //   [ 속지(PEEK) | 폴더 색 여백(PAGE_R) | 탭(TABW) ]  ← 왼쪽부터 순서대로 보임
-  const PEEK = 100; //  쌓였을 때 '속지(종이)'가 보이는 폭
-  const PAGE_R = 0; //  속지 오른쪽에 남는 폴더 색 여백
+  const PEEK = 100; //  쌓였을 때 속지가 보이는 폭
+  const PAGE_R = 0; //  속지 오른쪽에 남는 폴더 여백
   const STRIP = PEEK + PAGE_R; // 폴더 몸통이 튀어나오는 폭 (자동 계산)
 
-  // 탭 폭은 CSS(.folder__tab width)에서 자동으로 읽음 → CSS만 바꿔도 계산이 맞음
+  // 탭 폭 -> CSS (css 만 수정해도 ok)
   const TABW = folders[0].querySelector('.folder__tab')?.offsetWidth || 60;
 
   // 왼쪽 더미가 '시작되는 x'.
-  //  ※ .skills__label-tag(파란 라벨 귀)가 기둥보다 넓어서, 기둥 폭(ML)에서 시작하면
-  //    쌓인 폴더의 속지가 그 귀 뒤에 가려진다 → 귀 폭만큼 밀어서 시작.
+  //  ※ .skills__label-tag(파란 라벨)가 기둥보다 넓어서, 기둥 폭(ML)에서 시작하면
+  //    쌓인 폴더의 속지가 그 파란 라벨 뒤에 가려진다 → 파란 라벨 폭만큼 밀어서 시작.
   const EAR = document.querySelector('.skills__label-tag')?.offsetWidth || 0;
   const PILE_L = Math.max(ML, EAR);
 
   // 쌓인 폴더 1장이 실제로 차지하는 총 폭 = 속지 + 색여백 + 탭
-  //  ※ 탭이 폴더 오른쪽 '바깥'으로 튀어나오므로 반드시 더해줘야
+  //  ※ 탭이 폴더 오른쪽 바깥으로 튀어나오므로 반드시 더해줘야
   //    다음 폴더의 속지를 가리지 않는다.
   const PITCH = PEEK + PAGE_R + TABW;
   const MR = TABW + 24; // 오른쪽 여유 (맨 뒤 폴더 탭이 잘리지 않게)
 
-  // 폴더별 '오른쪽 여백(px)'. 값이 클수록 좁다.
+  // 폴더별 오른쪽 여백(px) - 값이 클수록 좁다.
   // 앞(0번)이 가장 좁아야 하므로 큰 값 → 작은 값 순서. 차이값(173)이 탭 계단 간격.
   const FOLDER_INSET = [519, 346, 173, 0];
 
+  // 화면폭이 아니라 STAGE_W 기준 - 어느 해상도에서도 폴더 폭이 같다
   const widthOf = (j) => {
-    const maxW = window.innerWidth - ML - MR;
+    const maxW = STAGE_W - ML - MR;
     return Math.max(STRIP, maxW - (FOLDER_INSET[j] ?? 0));
   };
 
@@ -335,7 +333,7 @@ if (folders.length) {
 
   const skillsTL = gsap.timeline({
     scrollTrigger: {
-      trigger: '.skills-wrap', // ← .skills 가 아니라 래퍼를 pin
+      trigger: '.skills-wrap', // - .skills 가 아니라 wrap- pin
       start: 'top top',
       end: '+=' + TOTAL_STEPS * STEP_PX,
       scrub: 1,
@@ -349,7 +347,7 @@ if (folders.length) {
     skillsTL.to(folders[j], { x: () => pileX(j), ease: 'power2.inOut', duration: 1 }, stepAt(j));
   }
 
-  // 마지막 폴더가 멈춘 직후 → Contact 가 오른쪽에서 밀고 들어옴
+  // 마지막 폴더가 멈춘 후 Contact 가 오른쪽에서 시작
   skillsTL.fromTo(
     '.contact',
     { xPercent: 100 },
@@ -357,15 +355,13 @@ if (folders.length) {
     WIPE_AT
   );
 
-  // Contact 내부 시퀀스 — 같은 타임라인에 얹으므로 전부 스크롤에 반응한다
+  // Contact 내부
   addContactSequence(skillsTL, SEQ_AT);
 }
 
-/* 카드 클릭 → 상세/팝업 (여기에 라우팅 또는 모달 연결) */
+/* 카드 클릭  */
 gsap.utils.toArray('.card').forEach((card, i) => {
   card.addEventListener('click', () => {
-    // TODO: 실제 상세 페이지 이동 또는 모달 오픈
-    // 예) location.href = `/project/${i + 1}`;
     console.log('open project', i + 1);
   });
 });

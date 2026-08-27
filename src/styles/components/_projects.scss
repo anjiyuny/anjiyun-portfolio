@@ -10,7 +10,7 @@
     visibility: hidden;
     white-space: nowrap;
     @include type-hero;
-    font-size: clamp(36px, 5vw, 72px);
+    font-size: 72px;
     color: $color-primary;
   }
 
@@ -56,6 +56,6 @@
     position: absolute;
     inset: 0;
     z-index: 58;
-    pointer-events: none; // 카드 개별로 클릭 허용
+    pointer-events: none;
   }
 }
