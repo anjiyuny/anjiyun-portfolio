@@ -52,3 +52,14 @@
   position: absolute;
   inset: 0;
 }
+
+// 배경 모눈종이
+@mixin grid-paper($cell: 60px, $line: 1px, $color: #3b48f3) {
+  background-color: transparent;
+  background-image:
+    linear-gradient(to bottom, $color $line, transparent $line),
+    linear-gradient(to right, $color $line, transparent $line);
+  background-size: $cell $cell;
+  background-position: 0 0;
+  background-repeat: repeat;
+}

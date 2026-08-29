@@ -10,8 +10,13 @@ $color-white: #ffffff;
 $color-highlight: #fff23d;
 $color-lime: #b8e319;
 $color-black: #000000;
+$color-grid: #3b48f3;
 
-// 색상 맵 (필요 시 함수로 참조: color('primary'))
+// ---------- 배경 모눈종이 ----------
+$grid-cell: 60px;
+$grid-line: 1px;
+
+// 색상 맵
 $colors: (
   'primary': $color-primary,
   'text': $color-text,

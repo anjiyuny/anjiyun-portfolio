@@ -10,9 +10,8 @@
 
   &__grid {
     @include fill;
+    @include grid-paper;
     z-index: 0;
-    background: url('/images/main-backgroud.png') no-repeat;
-    background-size: cover;
   }
 
   &__wrap {

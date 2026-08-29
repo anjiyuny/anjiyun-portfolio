@@ -1,11 +1,12 @@
 @use '../abstracts/tokens' as *;
+@use '../abstracts/mixins' as *;
 
 .skills {
   position: relative;
   height: 100vh;
-  background: url(/images/main-backgroud.png) no-repeat;
-  background-size: cover;
   overflow: hidden;
+
+  @include grid-paper;
 
   &__stage {
     position: absolute;
