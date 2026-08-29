@@ -110,26 +110,26 @@ $color-contact-bg: #000;
     position: absolute;
 
     &--1 {
-      top: 39%;
-      left: 22%;
+      top: 32%;
+      left: 14%;
       width: 251px;
     }
     &--2 {
-      top: 64%;
-      left: 26%;
+      top: 70%;
+      left: 18%;
       width: 316px;
     }
     &--3 {
-      top: 25%;
-      right: 25%;
+      top: 19%;
+      right: 15%;
       width: 432px;
     }
   }
 
   &__smile {
     position: absolute;
-    top: 66%;
-    right: 27%;
+    top: 68%;
+    right: 19%;
     width: 156px;
   }
 }
@@ -156,11 +156,5 @@ $color-contact-bg: #000;
   51%,
   100% {
     opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .contact__caret {
-    animation: none;
   }
 }

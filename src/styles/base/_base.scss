@@ -2,10 +2,23 @@
 @use '../abstracts/mixins' as *;
 
 body {
-  @include type-body; // 기본 본문 = Gmarket light 24
-  color: $color-text; // 본문 #333
-  background: $color-paper;
-  // overflow-x: hidden;
+  @include type-body;
+  color: $color-text;
+  overflow-x: clip;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
 
-  overflow-x: clip; // hidden → clip
+img,
+a {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+.is-selectable,
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
 }
