@@ -11,11 +11,15 @@ const floatScale = reduceMotion ? 0.4 : 1;
     해상도 대응
    ========================================================= */
 const STAGE_W = 1920; // 시안 가로 (_fitstage.scss 의 width 와 동일)
+const STAGE_H = 900; // 시안 세로
+const MAX_SCALE = 2; // 배율 상한 (8K 같은 초대형 화면 방어)
+
 let stageScale = 1;
 const stageH = () => window.innerHeight / stageScale; // 무대 좌표계에서의 화면 높이
 
 function fitStage() {
-  stageScale = Math.min(window.innerWidth / STAGE_W, 1); // 1920 보다 크게는 안 키움
+  // 가로·세로 중 작은 배율 → 4K(3840x2160)면 2배, 1920x1080이면 1배
+  stageScale = Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H, MAX_SCALE);
   document.documentElement.style.setProperty('--stage-scale', stageScale);
 }
 fitStage();
@@ -144,16 +148,33 @@ const waveK = () => (2 * Math.PI) / (STAGE_W * WAVE.WAVELEN);
 const waveY = (x) => stageH() * WAVE.MIDY + WAVE.A * Math.sin(waveK() * x + WAVE.PHASE);
 const waveDeg = (x) =>
   Math.atan(WAVE.A * waveK() * Math.cos(waveK() * x + WAVE.PHASE)) * (180 / Math.PI) * WAVE.BANK;
-const CARD_SLOTS = [0.13, 0.32, 0.5, 0.68, 0.87];
+const CARD_SLOTS = [0.107, 0.301, 0.5, 0.701, 0.897]; // 카드 중심 x (STAGE_W 비율)
+
+// 카드별 미세조정. 물결 공식 위에 더해진다. 순서는 HTML 의 .card 순서.
+//   x   : +오른쪽 / -왼쪽 (px)
+//   y   : +아래  / -위    (px)
+//   rot : +시계  / -반시계 (도)
+const CARD_ADJUST = [
+  { x: 0, y: 0, rot: 0 }, // 1번
+  { x: 0, y: 0, rot: 0 }, // 2번
+  { x: 0, y: 0, rot: 0 }, // 3번
+  { x: 0, y: 0, rot: 0 }, // 4번
+  { x: 0, y: 0, rot: 0 }, // 5번
+];
 
 gsap.utils.toArray('.card').forEach((card, i) => {
   const cw = card.offsetWidth,
     ch = card.offsetHeight;
-  const slotCX = () => STAGE_W * CARD_SLOTS[i];
+  const adj = CARD_ADJUST[i] ?? { x: 0, y: 0, rot: 0 };
+  const slotCX = () => STAGE_W * CARD_SLOTS[i] + adj.x;
   const s = { cx: STAGE_W + cw };
   const place = () => {
     const x = s.cx;
-    gsap.set(card, { x: x - cw / 2, y: waveY(x) - ch / 2, rotation: waveDeg(x) });
+    gsap.set(card, {
+      x: x - cw / 2,
+      y: waveY(x) - ch / 2 + adj.y,
+      rotation: waveDeg(x) + adj.rot,
+    });
   };
   place();
   gsap.set(card, { autoAlpha: 0 });
@@ -273,22 +294,22 @@ if (folders.length) {
   const TABW = folders[0].querySelector('.folder__tab')?.offsetWidth || 60;
 
   // 왼쪽 더미가 '시작되는 x'.
-  //  ※ .skills__label-tag(파란 라벨)가 기둥보다 넓어서, 기둥 폭(ML)에서 시작하면
-  //    쌓인 폴더의 속지가 그 파란 라벨 뒤에 가려진다 → 파란 라벨 폭만큼 밀어서 시작.
+  //  ※ .skills__label-tag(파란 라벨 귀)가 기둥보다 넓어서, 기둥 폭(ML)에서 시작하면
+  //    쌓인 폴더의 속지가 그 귀 뒤에 가려진다 → 귀 폭만큼 밀어서 시작.
   const EAR = document.querySelector('.skills__label-tag')?.offsetWidth || 0;
   const PILE_L = Math.max(ML, EAR);
 
   // 쌓인 폴더 1장이 실제로 차지하는 총 폭 = 속지 + 색여백 + 탭
-  //  ※ 탭이 폴더 오른쪽 바깥으로 튀어나오므로 반드시 더해줘야
+  //  ※ 탭이 폴더 오른쪽 '바깥'으로 튀어나오므로 반드시 더해줘야
   //    다음 폴더의 속지를 가리지 않는다.
   const PITCH = PEEK + PAGE_R + TABW;
   const MR = TABW + 24; // 오른쪽 여유 (맨 뒤 폴더 탭이 잘리지 않게)
 
-  // 폴더별 오른쪽 여백(px) - 값이 클수록 좁다.
+  // 폴더별 '오른쪽 여백(px)'. 값이 클수록 좁다.
   // 앞(0번)이 가장 좁아야 하므로 큰 값 → 작은 값 순서. 차이값(173)이 탭 계단 간격.
   const FOLDER_INSET = [519, 346, 173, 0];
 
-  // 화면폭이 아니라 STAGE_W 기준 - 어느 해상도에서도 폴더 폭이 같다
+  // 화면폭이 아니라 STAGE_W 기준 → 어느 해상도에서도 폴더 폭이 같다
   const widthOf = (j) => {
     const maxW = STAGE_W - ML - MR;
     return Math.max(STRIP, maxW - (FOLDER_INSET[j] ?? 0));

@@ -1,15 +1,19 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
-import fg from 'fast-glob';
+import { readdirSync, existsSync } from 'node:fs';
 
 const REPO = '/anjiyun-portfolio/';
 
-// index.html + project/*.html 을 자동으로 전부 빌드 대상에 넣는다
-const pages = Object.fromEntries(
-  fg
-    .sync(['index.html', 'project/*.html'])
-    .map((f) => [f.replace(/\.html$/, '').replace(/\//g, '-'), resolve(process.cwd(), f)])
-);
+const PROJECT_DIR = 'project';
+const pages = { index: resolve(process.cwd(), 'index.html') };
+
+if (existsSync(PROJECT_DIR)) {
+  for (const file of readdirSync(PROJECT_DIR)) {
+    if (!file.endsWith('.html')) continue;
+    const name = `project-${file.replace(/\.html$/, '')}`;
+    pages[name] = resolve(process.cwd(), PROJECT_DIR, file);
+  }
+}
 
 export default defineConfig(({ command }) => ({
   root: '.',

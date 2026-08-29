@@ -15,9 +15,14 @@
   }
 
   // 카드 뒤 배경 반짝이
+  //  ※ 무대(1920) 가 아니라 '화면 폭' 을 쓴다 → 넓으면 넓은 대로 퍼진다
   &__sparkles {
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: calc(100vw / var(--stage-scale, 1));
+    transform: translateX(-50%);
     z-index: 56;
     overflow: hidden;
     pointer-events: none;
@@ -52,10 +57,15 @@
   }
 
   // 카드
+  //  ※ 스파클과 같이 '화면 폭' 을 쓴다 → 카드가 넓은 화면에서 끝까지 퍼진다
   &__cards {
     position: absolute;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: calc(100vw / var(--stage-scale, 1));
+    transform: translateX(-50%);
     z-index: 58;
-    pointer-events: none;
+    pointer-events: none; // 카드 개별로 클릭 허용
   }
 }
